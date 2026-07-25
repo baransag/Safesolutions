@@ -420,7 +420,19 @@ img{max-width:100%;display:block;}
 /* ============================================================
    HERO — Apple / Tesla Grade Cinematic
    ============================================================ */
-#home{position:relative;height:100vh;min-height:680px;overflow:hidden;background:var(--gradient-cinematic);}
+#home{position:relative;height:clamp(600px,80vh,680px);min-height:600px;overflow:hidden;background:var(--gradient-cinematic);}
+@media(max-width:991px){#home{height:clamp(580px,86vh,650px);min-height:580px;}}
+@media(max-width:575px){#home{height:clamp(600px,92vh,660px);min-height:600px;}}
+
+/* Hero image layer — kept clear, sharp, and unfiltered.
+   All color treatment happens in the overlay layers below, not on the image itself. */
+.hero-swiper{position:absolute;inset:0;z-index:1;width:100%;height:100%;}
+.hero-swiper .swiper-wrapper,
+.hero-swiper .swiper-slide{position:relative;width:100%;height:100%;}
+.hero-slide-img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 32%;display:block;
+}
 
 /* Cinematic gradient background — slow ambient drift */
 .hero-gradient-bg{
@@ -455,17 +467,25 @@ img{max-width:100%;display:block;}
 .hero-arch-lines::before{top:22%;transform:rotate(-6deg);}
 .hero-arch-lines::after{top:68%;transform:rotate(4deg);border-top-color:rgba(255,255,255,0.08);}
 
-/* Layered overlay — premium depth */
+/* Layered overlay — premium depth, image stays clear
+   Only a soft readability gradient behind the text column + a gentle edge vignette.
+   No full-image color wash. */
 .hero-overlay{
   position:absolute;inset:0;z-index:2;
   background:
-    linear-gradient(180deg,rgba(18,11,46,0.35) 0%,rgba(18,11,46,0.08) 35%,rgba(18,11,46,0.78) 100%),
-    linear-gradient(95deg,rgba(18,11,46,0.50) 0%,rgba(18,11,46,0.02) 55%);
+    linear-gradient(180deg,rgba(18,11,46,0.12) 0%,rgba(18,11,46,0.02) 30%,rgba(18,11,46,0.58) 100%),
+    linear-gradient(100deg,rgba(18,11,46,0.34) 0%,rgba(18,11,46,0.10) 32%,rgba(18,11,46,0) 52%);
 }
-/* Crimson glow bottom */
+/* Soft bottom vignette — grounds the CTA row without tinting the photo */
 .hero-luxury-glow{
-  position:absolute;bottom:0;left:0;right:0;height:55%;z-index:2;pointer-events:none;
-  background:linear-gradient(180deg,transparent 0%,rgba(200,30,60,0.10) 55%,rgba(18,11,46,0.55) 100%);
+  position:absolute;bottom:0;left:0;right:0;height:38%;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(18,11,46,0.38) 100%);
+}
+/* Thin edge vignette for cinematic framing, image stays visible */
+.hero-overlay::after{
+  content:'';position:absolute;inset:0;
+  box-shadow:inset 0 0 160px rgba(18,11,46,0.35);
+  pointer-events:none;
 }
 /* Cinematic light beam */
 .hero-light-beam{
@@ -480,9 +500,9 @@ img{max-width:100%;display:block;}
   position:absolute;border-radius:50%;filter:blur(90px);
   pointer-events:none;z-index:2;animation:orbFloat 14s ease-in-out infinite;will-change:transform;
 }
-.hero-orb-1{width:520px;height:520px;background:rgba(226,58,86,0.16);top:-120px;right:-100px;animation-delay:0s;}
-.hero-orb-2{width:380px;height:380px;background:rgba(90,30,99,0.28);bottom:15%;left:-80px;animation-delay:-6s;}
-.hero-orb-3{width:300px;height:300px;background:rgba(51,25,107,0.30);top:38%;right:22%;animation-delay:-3s;}
+.hero-orb-1{width:520px;height:520px;background:rgba(226,58,86,0.10);top:-120px;right:-100px;animation-delay:0s;}
+.hero-orb-2{width:380px;height:380px;background:rgba(90,30,99,0.16);bottom:15%;left:-80px;animation-delay:-6s;}
+.hero-orb-3{width:300px;height:300px;background:rgba(51,25,107,0.16);top:38%;right:22%;animation-delay:-3s;}
 @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-35px) scale(1.06);}}
 
 /* Particles */
@@ -510,7 +530,8 @@ img{max-width:100%;display:block;}
 .hero-content{
   position:relative;z-index:5;height:100%;
   display:flex;flex-direction:column;justify-content:center;
-  max-width:1320px;margin:0 auto;padding:0 28px 90px;
+  max-width:1320px;margin:0 auto;
+  padding:clamp(92px,14vh,124px) 28px 44px;
 }
 
 /* Eyebrow */
@@ -534,9 +555,9 @@ img{max-width:100%;display:block;}
 
 /* Cinematic hero title */
 .hero-title{
-  font-size:clamp(2.9rem,6.6vw,6.2rem);color:var(--white);font-weight:600;
-  line-height:1.02;max-width:960px;margin-bottom:30px;letter-spacing:-0.022em;
-  text-shadow:0 2px 40px rgba(18,11,46,0.5);
+  font-size:clamp(2.1rem,4.4vw,3.9rem);color:var(--white);font-weight:600;
+  line-height:1.14;max-width:740px;margin-bottom:20px;letter-spacing:-0.015em;
+  text-shadow:0 2px 30px rgba(18,11,46,0.45);
 }
 .hero-title em{font-style:italic;background:linear-gradient(120deg,var(--gold-hover),var(--gold),var(--crimson));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:heroTitleGradientShift 6s ease-in-out infinite;font-weight:500;}
 @keyframes heroTitleGradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
@@ -557,8 +578,8 @@ img{max-width:100%;display:block;}
 
 /* Sub + CTA */
 .hero-sub{
-  font-size:clamp(1rem,1.4vw,1.2rem);
-  color:rgba(250,249,252,0.84);max-width:580px;margin-bottom:44px;
+  font-size:clamp(0.95rem,1.15vw,1.08rem);
+  color:rgba(250,249,252,0.84);max-width:540px;margin-bottom:34px;
   line-height:1.65;font-weight:400;
   opacity:0;transform:translateY(18px);
   transition:opacity 0.8s ease 0.65s,transform 0.8s ease 0.65s;
@@ -567,7 +588,7 @@ img{max-width:100%;display:block;}
 .hero-sub.revealed{opacity:1;transform:translateY(0);}
 
 .hero-btns{
-  display:flex;gap:16px;flex-wrap:wrap;margin-bottom:68px;
+  display:flex;gap:16px;flex-wrap:wrap;margin-bottom:44px;
   opacity:0;transform:translateY(18px) scale(0.97);
   transition:opacity 0.8s ease 0.88s,transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.88s;
 }
@@ -575,20 +596,20 @@ img{max-width:100%;display:block;}
 
 /* Meta stats */
 .hero-meta-row{
-  display:flex;gap:52px;flex-wrap:wrap;
+  display:flex;gap:44px;flex-wrap:wrap;
   opacity:0;transform:translateY(18px);
-  transition:opacity 0.8s ease 1.08s,transform 0.8s ease 1.08s;
+  transition:opacity 0.8s ease 1.02s,transform 0.8s ease 1.02s;
 }
 .hero-meta-row.revealed{opacity:1;transform:translateY(0);}
 .hero-meta-item{color:var(--white);}
 .hero-meta-item .num{
-  font-family:var(--font-display);font-size:2rem;font-weight:700;
+  font-family:var(--font-display);font-size:1.85rem;font-weight:700;
   color:var(--gold);line-height:1;
   text-shadow:0 0 20px rgba(226,58,86,0.55);
 }
 .hero-meta-item .lab{
-  font-family:var(--font-mono);font-size:0.67rem;letter-spacing:0.1em;
-  text-transform:uppercase;color:rgba(250,249,252,0.58);margin-top:5px;
+  font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.09em;
+  text-transform:uppercase;color:rgba(250,249,252,0.58);margin-top:6px;
 }
 
 /* Swiper pagination — premium */
@@ -635,21 +656,29 @@ img{max-width:100%;display:block;}
 
 /* Bottom strengths strip */
 .hero-strengths{
-  display:flex;flex-wrap:wrap;gap:14px;margin-top:38px;
-  opacity:0;transform:translateY(14px);
-  transition:opacity 0.8s ease 1.25s,transform 0.8s ease 1.25s;
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+  opacity:0;transform:translateY(10px);
+  transition:opacity 0.7s ease 1.2s,transform 0.7s ease 1.2s;
 }
 .hero-strengths.revealed{opacity:1;transform:translateY(0);}
 .hero-strength-chip{
   display:flex;align-items:center;gap:9px;padding:9px 18px;border-radius:100px;
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  background:var(--ivory);border:1px solid var(--border-gold);
   font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.04em;
-  color:rgba(250,249,252,0.85);transition:var(--transition);
+  color:var(--text-soft);transition:var(--transition);
 }
-.hero-strength-chip i{color:var(--gold);font-size:0.8rem;}
-.hero-strength-chip:hover{border-color:var(--gold);background:rgba(226,58,86,0.12);transform:translateY(-2px);}
+.hero-strength-chip i{color:var(--gold-deep);font-size:0.8rem;}
+.hero-strength-chip:hover{border-color:var(--gold);background:rgba(226,58,86,0.08);color:var(--navy);transform:translateY(-2px);}
 @media(max-width:575px){.hero-strengths{gap:10px;}.hero-strength-chip{padding:8px 14px;font-size:0.66rem;}}
+
+/* Trust strip — sits directly beneath the hero; same information, quieter presentation */
+.trust-strip{
+  background:var(--warm-white);
+  border-bottom:1px solid var(--border-gold);
+  padding:18px 0;
+  position:relative;z-index:3;
+}
+@media(max-width:575px){.trust-strip{padding:14px 0;}}
 
 /* ============================================================
    ABOUT
@@ -1489,7 +1518,6 @@ html.lenis{height:auto;}
     <div class="hero-btns" id="heroBtns">
       <a href="#services" class="btn-luxury btn-gold">Explore Solutions <i class="fa-solid fa-arrow-right"></i></a>
       <a href="#contact" class="btn-luxury btn-outline-luxury">Contact Us</a>
-      <a href="https://wa.me/923216684665" target="_blank" rel="noopener" class="btn-luxury btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
     </div>
     <div class="hero-meta-row" id="heroMeta">
       <div class="hero-meta-item"><div class="num"><span class="countup" data-target="20">0</span>+</div><div class="lab">Years Experience</div></div>
@@ -1497,17 +1525,23 @@ html.lenis{height:auto;}
       <div class="hero-meta-item"><div class="num"><span class="countup" data-target="1000">0</span>+</div><div class="lab">Happy Clients</div></div>
       <div class="hero-meta-item"><div class="num"><span class="countup" data-target="200">0</span>+</div><div class="lab">Corporate Clients</div></div>
     </div>
-    <div class="hero-strengths" id="heroStrengths">
-      <div class="hero-strength-chip"><i class="fa-solid fa-gears"></i> Engineering Excellence</div>
-      <div class="hero-strength-chip"><i class="fa-solid fa-layer-group"></i> Premium Systems</div>
-      <div class="hero-strength-chip"><i class="fa-solid fa-shield-halved"></i> Reliable Protection</div>
-    </div>
   </div>
   <div class="scroll-indicator">
     <span class="lab">SCROLL</span>
     <div class="mouse"></div>
   </div>
 </header>
+
+<!-- TRUST STRIP — moved out of the hero to keep it clean; same info, quieter presentation -->
+<div class="trust-strip">
+  <div class="container-xl">
+    <div class="hero-strengths" id="heroStrengths">
+      <div class="hero-strength-chip"><i class="fa-solid fa-gears"></i> Engineering Excellence</div>
+      <div class="hero-strength-chip"><i class="fa-solid fa-layer-group"></i> Premium Systems</div>
+      <div class="hero-strength-chip"><i class="fa-solid fa-shield-halved"></i> Reliable Protection</div>
+    </div>
+  </div>
+</div>
 
 <!-- ABOUT -->
 <section id="about" class="section">
