@@ -193,7 +193,12 @@ img{max-width:100%;display:block;}
   display:flex;align-items:center;justify-content:center;
   transition:opacity 0.8s ease,visibility 0.8s ease;
 }
-#preloader.loaded{opacity:0;visibility:hidden;}
+#preloader.loaded{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  display:none!important;
+}
 .preloader-inner{text-align:center;position:relative;}
 .preloader-logo{
   width:84px;height:84px;object-fit:contain;
@@ -236,25 +241,89 @@ img{max-width:100%;display:block;}
 }
 @keyframes ringSpinLoad{to{transform:rotate(360deg);}}
 
-/* Page Transition Overlay */
-#pageTransitionOverlay{
-  position:fixed;inset:0;z-index:9999;
-  background:var(--gradient-cinematic);
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:16px;
-  opacity:0;pointer-events:none;
-  transition:opacity 0.4s ease;
+/* Page Transition Overlay — Architectural 3D Structural Cube (Reference #6) */
+#pageTransitionOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: radial-gradient(circle at center, #1e0e38 0%, #0c061a 100%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
-#pageTransitionOverlay.active{opacity:1;pointer-events:auto;}
-.pto-logo{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 0 15px rgba(226,58,86,0.8));}
-.pto-text{font-family:var(--font-display);font-weight:700;font-size:1.15rem;color:var(--white);letter-spacing:0.1em;}
+#pageTransitionOverlay.active { opacity: 1; pointer-events: auto; }
+
+.pto-cube-wrapper {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
+  position: relative; z-index: 2;
+}
+.pto-scene {
+  width: 90px; height: 90px;
+  perspective: 700px;
+}
+.pto-cube {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-24deg) rotateY(45deg);
+  animation: ptoCubeSpin 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+@keyframes ptoCubeSpin {
+  0% { transform: rotateX(-24deg) rotateY(45deg); }
+  50% { transform: rotateX(-24deg) rotateY(225deg) scale(1.06); }
+  100% { transform: rotateX(-24deg) rotateY(405deg); }
+}
+.pto-cube-face {
+  position: absolute; width: 90px; height: 90px;
+  border: 1.5px solid rgba(226,58,86,0.85);
+  box-shadow: 0 0 16px rgba(226,58,86,0.3) inset, 0 0 14px rgba(226,58,86,0.25);
+  background: rgba(36,17,65,0.45);
+  backdrop-filter: blur(6px);
+}
+.pto-cube-top    { transform: rotateX(90deg) translateZ(45px); background: rgba(226,58,86,0.25); }
+.pto-cube-bottom { transform: rotateX(-90deg) translateZ(45px); background: rgba(18,11,46,0.7); }
+.pto-cube-left   { transform: rotateY(-90deg) translateZ(45px); background: rgba(90,30,99,0.35); }
+.pto-cube-right  { transform: rotateY(90deg) translateZ(45px); background: rgba(124,31,76,0.35); }
+.pto-cube-front  { transform: rotateY(0deg) translateZ(45px); background: rgba(200,30,60,0.3); }
+.pto-cube-back   { transform: rotateY(180deg) translateZ(45px); background: rgba(51,25,107,0.5); }
+
+.pto-cube-core {
+  position: absolute; top: 25px; left: 25px; width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  transform: translateZ(0);
+  box-shadow: 0 0 24px rgba(226,58,86,0.9);
+  animation: ptoCorePulse 1.2s ease-in-out infinite alternate;
+  border-radius: 4px;
+}
+@keyframes ptoCorePulse {
+  0% { transform: scale(0.7) rotate(0deg); opacity: 0.7; }
+  100% { transform: scale(1.1) rotate(90deg); opacity: 1; filter: drop-shadow(0 0 14px var(--gold-hover)); }
+}
+
+.pto-status-text {
+  text-align: center;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.pto-brand-text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: var(--white);
+}
+.pto-arch-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
 
 /* ============================================================
-   NAVBAR — Premium Glassmorphism
+   NAVBAR — Premium Glassmorphism & Glass Buttons
    ============================================================ */
 #mainNav{
   position:fixed;top:0;left:0;right:0;z-index:1000;
-  padding:22px 0;
+  padding:20px 0;
   transition:padding 0.5s cubic-bezier(0.22,1,0.36,1),
     background 0.5s cubic-bezier(0.22,1,0.36,1),
     box-shadow 0.5s ease,
@@ -263,8 +332,8 @@ img{max-width:100%;display:block;}
   will-change:transform;
 }
 #mainNav.scrolled{
-  padding:11px 0;
-  background:rgba(250,249,252,0.88);
+  padding:10px 0;
+  background:rgba(250,249,252,0.90);
   backdrop-filter:blur(32px) saturate(200%);
   -webkit-backdrop-filter:blur(32px) saturate(200%);
   box-shadow:0 2px 40px -6px rgba(18,11,46,0.12),
@@ -300,8 +369,6 @@ img{max-width:100%;display:block;}
 
 #mainNav:not(.scrolled) .nav-brand-text .t1{color:var(--white);}
 #mainNav:not(.scrolled) .nav-brand-text .t2{color:rgba(255,255,255,0.6);}
-#mainNav:not(.scrolled) .nav-links a{color:rgba(255,255,255,0.88);}
-#mainNav:not(.scrolled) .nav-links a:hover{color:var(--white);}
 #mainNav:not(.scrolled) .nav-toggle{
   background:rgba(255,255,255,0.12);
   border-color:rgba(255,255,255,0.3);
@@ -311,35 +378,58 @@ img{max-width:100%;display:block;}
   filter:drop-shadow(0 2px 10px rgba(0,0,0,0.4)) brightness(1.08);
 }
 
+/* Premium Glass Navigation Buttons */
 .nav-links{
-  display:flex;align-items:center;gap:34px;
+  display:flex;align-items:center;gap:8px;
   list-style:none;margin:0;padding:0;
 }
+.nav-links li{margin:0;}
 .nav-links a{
-  font-size:0.875rem;font-weight:500;color:var(--text-soft);
-  position:relative;padding:7px 0;
-  transition:color 0.3s ease;
+  font-size:0.86rem;font-weight:500;
+  color:var(--text-soft);
+  position:relative;
+  padding:8px 18px;
+  border-radius:100px;
+  background:rgba(255,255,255,0.45);
+  border:1px solid rgba(226,58,86,0.16);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  transition:all 0.35s cubic-bezier(0.22,1,0.36,1);
   letter-spacing:0.01em;
+  display:inline-flex;align-items:center;justify-content:center;
+  text-decoration:none;
 }
-.nav-links a::after{
-  content:'';position:absolute;left:0;bottom:-1px;
-  height:1.5px;width:0;
-  background:linear-gradient(90deg,var(--gold),var(--gold-hover));
-  border-radius:2px;
-  transition:width 0.4s cubic-bezier(0.22,1,0.36,1);
+.nav-links a:hover{
+  color:var(--navy);
+  background:rgba(255,255,255,0.85);
+  border-color:rgba(226,58,86,0.35);
+  transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(226,58,86,0.15);
 }
-.nav-links a:hover{color:var(--navy);}
-.nav-links a:hover::after,
-.nav-links a.active-nav::after{width:100%;}
-.nav-links a.active-nav{color:var(--navy);font-weight:600;}
-
-.nav-links a.active-nav::before{
-  content:'';position:absolute;bottom:-7px;left:50%;
-  transform:translateX(-50%);
-  width:4px;height:4px;border-radius:50%;background:var(--gold);
-  animation:navDotIn 0.3s cubic-bezier(0.22,1,0.36,1);
+.nav-links a.active-nav{
+  background:linear-gradient(135deg,var(--gold),var(--gold-deep))!important;
+  color:var(--white)!important;
+  border-color:transparent!important;
+  font-weight:600;
+  box-shadow:0 6px 20px -4px rgba(226,58,86,0.55), 0 0 0 1px rgba(255,255,255,0.25) inset!important;
+  transform:translateY(-1px);
 }
-@keyframes navDotIn{from{opacity:0;transform:translateX(-50%) scale(0);}to{opacity:1;transform:translateX(-50%) scale(1);}}
+#mainNav:not(.scrolled) .nav-links a{
+  color:rgba(255,255,255,0.88);
+  background:rgba(255,255,255,0.08);
+  border-color:rgba(255,255,255,0.18);
+}
+#mainNav:not(.scrolled) .nav-links a:hover{
+  color:var(--white);
+  background:rgba(255,255,255,0.22);
+  border-color:rgba(255,255,255,0.45);
+}
+#mainNav:not(.scrolled) .nav-links a.active-nav{
+  background:linear-gradient(135deg,var(--gold),var(--gold-deep))!important;
+  color:var(--white)!important;
+  border-color:transparent!important;
+  box-shadow:0 6px 22px -4px rgba(226,58,86,0.7), 0 0 0 1px rgba(255,255,255,0.3) inset!important;
+}
 
 .nav-cta{display:flex;align-items:center;gap:14px;}
 .nav-cta .btn-luxury{
@@ -374,13 +464,20 @@ img{max-width:100%;display:block;}
   .nav-links{
     position:fixed;top:0;right:-100%;width:80%;max-width:340px;
     height:100vh;background:var(--white);
-    flex-direction:column;justify-content:center;gap:30px;
+    flex-direction:column;justify-content:center;gap:16px;padding:36px 24px;
     box-shadow:-10px 0 60px rgba(0,0,0,0.15);
     transition:right 0.55s cubic-bezier(0.22,1,0.36,1);
     z-index:1001;border-left:1px solid var(--border-gold);
   }
+  .nav-links a{
+    width:100%;
+    padding:12px 20px;
+    font-size:0.95rem;
+    background:rgba(18,11,46,0.04);
+    border-color:rgba(226,58,86,0.15);
+  }
   .nav-links.open{right:0;}
-  .nav-links.open li{animation:slideInNavItem 0.5s cubic-bezier(0.22,1,0.36,1) forwards;opacity:0;}
+  .nav-links.open li{animation:slideInNavItem 0.5s cubic-bezier(0.22,1,0.36,1) forwards;opacity:0;width:100%;}
   .nav-links.open li:nth-child(1){animation-delay:0.05s;}
   .nav-links.open li:nth-child(2){animation-delay:0.10s;}
   .nav-links.open li:nth-child(3){animation-delay:0.15s;}
@@ -390,7 +487,7 @@ img{max-width:100%;display:block;}
   .nav-links.open li:nth-child(7){animation-delay:0.35s;}
   @keyframes slideInNavItem{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
   .nav-toggle{display:flex;}
-  #mainNav:not(.scrolled) .nav-links a{color:var(--text-soft);}
+  #mainNav:not(.scrolled) .nav-links a{color:var(--text-soft);background:rgba(18,11,46,0.04);}
   .nav-cta .btn-luxury span{display:none;}
   .nav-cta .btn-luxury{padding:12px 15px;}
 }
@@ -687,50 +784,377 @@ img{max-width:100%;display:block;}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
 /* CEO Leadership Section */
-.ceo-section{margin-top:clamp(40px,6vw,70px);padding-top:clamp(30px,5vw,50px);border-top:1px solid var(--border-gold);}
-.ceo-grid{display:grid;grid-template-columns:0.42fr 0.58fr;gap:48px;align-items:center;}
-@media(max-width:991px){.ceo-grid{grid-template-columns:1fr;gap:36px;}}
+.ceo-section{margin-top:clamp(36px,5vw,56px);padding-top:clamp(28px,4vw,44px);border-top:1px solid var(--border-gold);}
+.ceo-grid{display:grid;grid-template-columns:0.40fr 0.60fr;gap:40px;align-items:center;}
+@media(max-width:991px){.ceo-grid{grid-template-columns:1fr;gap:28px;}}
 .ceo-image-wrap{
-  position:relative;border-radius:24px;overflow:hidden;aspect-ratio:3/4;
+  position:relative;border-radius:22px;overflow:hidden;aspect-ratio:3/3.8;
   box-shadow:var(--shadow-lg), 0 0 0 1px var(--border-gold);
-  background:var(--ivory);
+  background:var(--ivory);max-width:380px;margin:0 auto;
 }
 .ceo-image-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 6s ease;}
 .ceo-image-wrap:hover img{transform:scale(1.03);}
 .ceo-image-accent{position:absolute;bottom:-8px;right:-8px;width:50%;height:40%;background:var(--gradient-accent);border-radius:20px;z-index:-1;opacity:0.3;}
-.ceo-content .ceo-quote{font-family:var(--font-display);font-size:clamp(1.15rem,2vw,1.45rem);color:var(--text);line-height:1.65;font-weight:400;font-style:italic;margin-bottom:24px;position:relative;padding-left:28px;}
-.ceo-content .ceo-quote::before{content:'"';position:absolute;left:0;top:-8px;font-size:3rem;font-family:var(--font-display);color:var(--gold);line-height:1;font-style:normal;}
-.ceo-content .ceo-name{font-family:var(--font-display);font-weight:700;font-size:1.2rem;color:var(--navy);}
-.ceo-content .ceo-title{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-deep);margin-top:4px;font-weight:600;}
-.ceo-content .ceo-divider{width:50px;height:2px;background:var(--gradient-accent);margin:18px 0;border-radius:2px;}
+.ceo-content{display:flex;flex-direction:column;justify-content:center;}
+.ceo-content .ceo-quote{font-family:var(--font-display);font-size:clamp(1.08rem,1.8vw,1.32rem);color:var(--text);line-height:1.65;font-weight:400;font-style:italic;margin-bottom:18px;position:relative;padding-left:24px;}
+.ceo-content .ceo-quote::before{content:'"';position:absolute;left:0;top:-8px;font-size:2.8rem;font-family:var(--font-display);color:var(--gold);line-height:1;font-style:normal;}
+.ceo-pillar-points{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.ceo-pillar{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-soft);display:flex;align-items:center;gap:10px;letter-spacing:0.02em;}
+.ceo-pillar i{color:var(--gold);font-size:0.85rem;}
+.ceo-divider{width:48px;height:2px;background:var(--gradient-accent);margin:14px 0;border-radius:2px;}
+.ceo-meta-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.ceo-name{font-family:var(--font-display);font-weight:700;font-size:1.18rem;color:var(--navy);}
+.ceo-title{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold-deep);margin-top:2px;font-weight:600;}
+.ceo-brand-seal{
+  width:44px;height:44px;border-radius:50%;background:rgba(226,58,86,0.08);border:1px solid var(--border-gold);
+  display:flex;align-items:center;justify-content:center;color:var(--gold-deep);font-size:1.1rem;flex-shrink:0;
+}
 
 /* ============================================================
-   PRODUCTS & APPLICATIONS SECTION
+   ULTRA-STYLE PRODUCTS DROPDOWN IN NAVBAR
+   ============================================================ */
+.nav-item-has-dropdown{position:relative;}
+.nav-dropdown-trigger{display:inline-flex;align-items:center;gap:6px;}
+.nav-caret{font-size:0.65rem;transition:transform 0.25s ease;}
+.nav-item-has-dropdown:hover .nav-caret,
+.nav-item-has-dropdown.dropdown-open .nav-caret{transform:rotate(180deg);}
+
+.nav-products-dropdown{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:50%;
+  transform:translateX(-50%) translateY(8px);
+  width:320px;
+  background:rgba(255,255,255,0.98);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1.5px solid var(--border-gold);
+  border-radius:18px;
+  box-shadow:0 16px 40px -8px rgba(18,11,46,0.25), 0 0 0 1px rgba(226,58,86,0.08);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity 0.22s cubic-bezier(0.22,1,0.36,1),
+              transform 0.22s cubic-bezier(0.22,1,0.36,1),
+              visibility 0.22s;
+  z-index:1200;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Open on hover OR on .dropdown-open class (click) */
+.nav-item-has-dropdown:hover .nav-products-dropdown,
+.nav-item-has-dropdown.dropdown-open .nav-products-dropdown{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
+}
+
+.nav-products-dropdown-inner{display:flex;flex-direction:column;}
+
+.nav-dropdown-header{
+  padding:12px 16px 10px;
+  background:var(--ivory);
+  border-bottom:1px solid var(--border-gold);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  color:var(--navy);
+  text-transform:uppercase;
+  flex-shrink:0;
+}
+.badge-cat-count{
+  font-size:0.62rem;
+  padding:2px 7px;
+  border-radius:100px;
+  background:rgba(226,58,86,0.12);
+  color:var(--gold-deep);
+  border:1px solid var(--border-gold);
+}
+
+.nav-category-list{
+  overflow-y:auto;
+  padding:4px 0;
+  scrollbar-width:thin;
+  scrollbar-color:var(--gold) transparent;
+  max-height:410px;
+}
+.nav-category-list::-webkit-scrollbar{width:5px;}
+.nav-category-list::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px;}
+
+.nav-cat-row{
+  display:flex!important;
+  align-items:center;
+  justify-content:space-between;
+  width:100%!important;
+  padding:9px 16px!important;
+  background:transparent!important;
+  border:none!important;
+  border-bottom:1px solid rgba(18,11,46,0.05)!important;
+  border-radius:0!important;
+  text-decoration:none!important;
+  color:var(--navy)!important;
+  font-family:var(--font-base)!important;
+  font-size:0.85rem!important;
+  font-weight:600!important;
+  box-shadow:none!important;
+  transform:none!important;
+  transition:background 0.18s ease,color 0.18s ease,padding-left 0.18s ease!important;
+  cursor:pointer;
+}
+.nav-cat-row:last-child{border-bottom:none!important;}
+.nav-cat-row .ncat-icon{
+  width:24px;height:24px;border-radius:6px;
+  background:rgba(226,58,86,0.08);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold-deep);font-size:0.72rem;
+  margin-right:10px;flex-shrink:0;
+  transition:all 0.18s ease;
+}
+.nav-cat-row .ncat-num{
+  font-family:var(--font-mono);font-size:0.7rem;
+  color:var(--text-muted);margin-right:6px;
+}
+.nav-cat-row .ncat-name{flex:1;text-align:left;line-height:1.25;}
+.nav-cat-row .ncat-arrow{
+  font-size:0.65rem;color:var(--text-muted);opacity:0;
+  transform:translateX(-4px);transition:all 0.18s ease;
+}
+.nav-cat-row:hover{
+  background:var(--ivory)!important;
+  color:var(--gold-deep)!important;
+  padding-left:20px!important;
+}
+.nav-cat-row:hover .ncat-icon{
+  background:var(--gold);color:var(--white);
+}
+.nav-cat-row:hover .ncat-arrow{
+  opacity:1;transform:translateX(0);color:var(--gold);
+}
+.nav-cat-row.active-cat-row{
+  background:linear-gradient(90deg,rgba(226,58,86,0.12),transparent)!important;
+  color:var(--gold-deep)!important;
+  font-weight:700!important;
+}
+.nav-cat-row.active-cat-row .ncat-icon{
+  background:var(--gold);color:var(--white);
+}
+
+@media(max-width:991px){
+  .nav-products-dropdown{
+    position:static;
+    transform:none!important;
+    width:100%;
+    max-height:0;
+    opacity:0;
+    visibility:hidden;
+    overflow:hidden;
+    transition:max-height 0.35s ease,opacity 0.25s ease;
+    border-radius:12px;
+    margin-top:6px;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,0.06);
+    border:1px solid var(--border-gold);
+    display:block;
+  }
+  .nav-item-has-dropdown.dropdown-open .nav-products-dropdown{
+    max-height:380px;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  .nav-category-list{max-height:320px;}
+  .nav-cat-row{padding:10px 14px!important;font-size:0.84rem!important;}
+}
+
+/* ============================================================
+   PRODUCTS & APPLICATIONS SECTION (CLEAN FULL-WIDTH ARCHITECTURE)
    ============================================================ */
 #products{background:var(--warm-white);overflow:hidden;}
-.section-head{max-width:720px;margin-bottom:48px;}
+.section-head{max-width:720px;margin-bottom:36px;}
 .section-head h2{font-size:clamp(1.9rem,3.4vw,2.7rem);margin:14px 0 16px;line-height:1.15;}
 .section-head p{color:var(--text-soft);font-size:1.02rem;line-height:1.7;}
 .section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
 
-.products-cat-tabs{display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;justify-content:center;}
-.products-cat-tab{
-  padding:10px 24px;border-radius:100px;font-size:0.88rem;font-weight:600;
-  cursor:pointer;background:var(--ivory);border:1.5px solid var(--border-gold);
-  color:var(--text-soft);transition:var(--transition);
+.products-display-wrapper{
+  max-width:1100px;
+  margin:0 auto;
 }
-.products-cat-tab.active{
-  background:var(--navy);color:var(--white);border-color:var(--navy);
-  box-shadow:0 8px 24px -8px rgba(18,11,46,0.35);
-}
-.products-cat-tab:hover:not(.active){border-color:var(--gold);transform:translateY(-2px);}
 
-.products-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
-  position:relative;z-index:1;
+/* Selected Category Card */
+.product-selected-card{
+  background:var(--white);
+  border:1.5px solid var(--border-gold);
+  border-radius:24px;
+  padding:clamp(22px,3.5vw,40px);
+  box-shadow:var(--shadow-md);
+  position:relative;overflow:hidden;
+  animation:fadeInUp 0.4s ease;
 }
-@media(max-width:1199px){.products-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:767px){.products-grid{grid-template-columns:repeat(2,1fr);}}
+.product-selected-header{
+  display:grid;grid-template-columns:0.44fr 0.56fr;gap:32px;align-items:center;
+  margin-bottom:26px;padding-bottom:24px;border-bottom:1px solid var(--border-gold);
+}
+@media(max-width:767px){
+  .product-selected-header{grid-template-columns:1fr;gap:20px;}
+}
+.product-selected-img-wrap{
+  border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--ivory);
+  border:1.5px solid var(--border-gold);box-shadow:var(--shadow-sm);position:relative;
+}
+.product-selected-img-wrap img{
+  width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;
+}
+.product-selected-img-wrap:hover img{transform:scale(1.04);}
+
+.product-selected-info .eyebrow{margin-bottom:6px;color:var(--gold-deep);}
+.product-selected-info h3{
+  font-size:clamp(1.5rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;font-weight:700;
+}
+.product-selected-info h3 i{color:var(--gold);font-size:1.35rem;}
+.product-selected-info .desc{
+  font-size:0.98rem;color:var(--text-soft);line-height:1.7;margin-bottom:18px;
+}
+
+/* Subcategories Pill Block (For Waterproofing & Grout & Anchoring) */
+.product-subcats-box{
+  background:var(--ivory);
+  border:1.5px solid var(--border-gold);
+  border-radius:18px;
+  padding:18px 22px;
+  margin-bottom:24px;
+}
+.product-subcats-title{
+  font-family:var(--font-mono);font-size:0.75rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.08em;color:var(--navy);
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
+.product-subcats-title i{color:var(--gold);}
+.product-subcats-grid{
+  display:flex;flex-wrap:wrap;gap:9px;
+}
+.subcat-pill{
+  padding:8px 16px;border-radius:100px;
+  background:var(--white);border:1.5px solid var(--border-gold);
+  font-family:var(--font-base);font-size:0.84rem;font-weight:600;color:var(--navy);
+  box-shadow:var(--shadow-sm);display:inline-flex;align-items:center;gap:8px;
+  transition:all 0.25s ease;
+}
+.subcat-pill i{color:var(--gold);font-size:0.75rem;}
+.subcat-pill:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:var(--shadow-gold);}
+
+/* Benefits and Technical Details */
+.product-specs-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:26px;
+}
+@media(max-width:767px){.product-specs-grid{grid-template-columns:1fr;gap:16px;}}
+.product-specs-card{
+  background:var(--ivory);border:1px solid var(--border-gold);border-radius:18px;padding:20px;
+}
+.product-specs-card h5{
+  font-family:var(--font-mono);font-size:0.78rem;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--gold-deep);margin-bottom:12px;font-weight:700;
+}
+.product-specs-card ul{list-style:none;padding:0;margin:0;}
+.product-specs-card li{
+  font-size:0.88rem;color:var(--text-soft);line-height:1.6;margin-bottom:7px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.product-specs-card li i{color:var(--gold);font-size:0.82rem;margin-top:4px;flex-shrink:0;}
+
+/* Application Photos 3-Column Slot Showcase */
+.product-app-showcase{
+  margin-top:24px;padding-top:24px;border-top:1px solid var(--border-gold);
+}
+.product-app-title{
+  font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--navy);
+  margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;
+}
+.product-app-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+}
+@media(max-width:767px){.product-app-grid{grid-template-columns:1fr;}}
+.app-photo-card{
+  border-radius:18px;overflow:hidden;background:var(--ivory);
+  border:1.5px solid var(--border-gold);box-shadow:var(--shadow-sm);
+  position:relative;aspect-ratio:4/3;cursor:pointer;
+}
+.app-photo-card img{
+  width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;
+}
+.app-photo-card:hover img{transform:scale(1.05);}
+.app-photo-label{
+  position:absolute;bottom:0;left:0;right:0;padding:12px 16px;
+  background:linear-gradient(180deg,transparent 0%,rgba(18,11,46,0.88) 100%);
+  color:var(--white);font-family:var(--font-mono);font-size:0.75rem;font-weight:600;
+  letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.8);
+}
+.product-action-row{
+  display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;
+}
+
+/* Products View Switcher (List View / Grid View) */
+.products-view-switcher{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:var(--ivory);
+  border:1.5px solid var(--border-gold);
+  border-radius:100px;
+  padding:4px 6px;
+  margin-top:18px;
+  box-shadow:var(--shadow-sm);
+}
+.view-switch-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 18px;
+  border-radius:100px;
+  border:none;
+  background:transparent;
+  color:var(--text-soft);
+  font-family:var(--font-base);
+  font-size:0.86rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.22s ease;
+}
+.view-switch-btn i{
+  font-size:0.85rem;
+  color:var(--gold);
+  transition:color 0.22s ease;
+}
+.view-switch-btn:hover:not(.active){
+  color:var(--navy);
+  background:rgba(255,255,255,0.8);
+}
+.view-switch-btn.active{
+  background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+  color:var(--white);
+  box-shadow:0 6px 18px -4px rgba(226,58,86,0.5);
+}
+.view-switch-btn.active i{
+  color:var(--white);
+}
+
+/* Products Grid (All Products 4-Column View) */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  position:relative;
+  z-index:1;
+  animation:fadeInUp 0.4s ease;
+}
+@media(max-width:1199px){.products-grid{grid-template-columns:repeat(3,1fr);gap:18px;}}
+@media(max-width:767px){.products-grid{grid-template-columns:repeat(2,1fr);gap:14px;}}
 @media(max-width:480px){.products-grid{grid-template-columns:1fr;}}
 
 .product-item-card{
@@ -745,7 +1169,7 @@ img{max-width:100%;display:block;}
 }
 .product-item-card::before{
   content:'';position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,rgba(18,11,46,0.05) 0%,rgba(18,11,46,0.90) 100%);
+  background:linear-gradient(180deg,rgba(18,11,46,0.05) 0%,rgba(18,11,46,0.92) 100%);
   transition:opacity 0.4s ease;
 }
 .product-item-card::after{
@@ -791,11 +1215,11 @@ img{max-width:100%;display:block;}
 }
 @keyframes rippleExpand{to{transform:scale(4);opacity:0;}}
 
-/* Product Detail Selected Application Imagery */
+/* Product Detail Selected Application Imagery (3 Slots Grid) */
 .detail-modal-project-img{
   width:100%;height:180px;object-fit:cover;border-radius:14px;
-  border:1px solid var(--border-gold);box-shadow:var(--shadow-sm);
-  transition:transform 0.4s ease;
+  border:1.5px solid var(--border-gold);box-shadow:var(--shadow-sm);
+  transition:transform 0.4s ease;display:block;
 }
 .detail-modal-project-img:hover{transform:scale(1.03);}
 
@@ -830,7 +1254,7 @@ img{max-width:100%;display:block;}
   flex:0 0 auto;width:340px;margin-right:22px;
   border-radius:20px;overflow:hidden;
   background:rgba(255,255,255,0.04);
-  border:1px solid rgba(226,58,86,0.15);
+  border:1px solid rgba(226,58,86,0.18);
   transition:var(--transition);cursor:pointer;
   position:relative;
 }
@@ -855,14 +1279,25 @@ img{max-width:100%;display:block;}
 }
 .proj-card:hover .spotlight{opacity:1;}
 
-.proj-card-body{padding:18px 20px;}
-.proj-card-body .proj-tag{
-  font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.12em;
-  color:var(--gold);text-transform:uppercase;
+/* Projects Card Text Contrast Scrim */
+.proj-card-body{
+  padding:26px 20px 20px;
+  position:absolute; bottom:0; left:0; right:0; z-index:3;
+  background:linear-gradient(180deg, rgba(18,11,46,0) 0%, rgba(18,11,46,0.85) 35%, rgba(18,11,46,0.98) 100%);
+  backdrop-filter:blur(3px);
 }
-.proj-card-body h4{color:var(--white);font-size:1.08rem;margin:8px 0 0;font-weight:600;}
+.proj-card-body .proj-tag{
+  font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.14em;
+  color:var(--gold);text-transform:uppercase;font-weight:600;
+  text-shadow:0 1px 4px rgba(0,0,0,0.95);
+}
+.proj-card-body h4{
+  color:var(--white);font-size:1.12rem;margin:8px 0 0;font-weight:700;
+  text-shadow:0 2px 6px rgba(0,0,0,0.95);
+  line-height:1.3;
+}
 
-/* CLIENT LOGO SHOWCASE — 4 ROWS MARQUEE WALL */
+/* CLIENT LOGO SHOWCASE — 4 ROWS MARQUEE WALL (75–90% Frame Utilization) */
 #client-logos{background:var(--gradient-cinematic);padding:90px 0;overflow:hidden;position:relative;}
 #client-logos::before{
   content:'';position:absolute;inset:0;
@@ -898,21 +1333,25 @@ img{max-width:100%;display:block;}
 
 .client-logo-card{
   flex:0 0 auto;
-  width:clamp(140px,13vw,190px);
-  height:clamp(80px,7.5vw,110px);
-  border-radius:16px;
+  width:clamp(170px,15vw,230px);
+  height:clamp(90px,8vw,115px);
+  border-radius:18px;
   display:flex;align-items:center;justify-content:center;
   cursor:default;position:relative;overflow:hidden;
   background:#ffffff;
-  border:1px solid rgba(226,58,86,0.18);
-  box-shadow:0 4px 18px -6px rgba(18,11,46,0.18);
-  will-change:transform;padding:14px 18px;
-  transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),
-    box-shadow 0.5s ease,border-color 0.4s ease;
+  border:1.5px solid rgba(226,58,86,0.18);
+  box-shadow:0 6px 20px -6px rgba(18,11,46,0.22);
+  will-change:transform;
+  padding:8px 14px;
+  transition:transform 0.4s cubic-bezier(0.22,1,0.36,1),
+    box-shadow 0.4s ease,border-color 0.3s ease;
 }
 .client-logo-card img{
-  width:100%;height:100%;object-fit:contain!important;border-radius:0;
-  transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);
+  width:100%;height:100%;
+  max-width:92%;max-height:88%;
+  object-fit:contain!important;border-radius:0;
+  display:block;
+  transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);
 }
 .client-logo-card:hover{
   transform:translateY(-6px) scale(1.04);
@@ -922,7 +1361,7 @@ img{max-width:100%;display:block;}
 }
 .client-logo-card:hover img{transform:scale(1.06);}
 @media(max-width:575px){
-  .client-logo-card{width:clamp(110px,30vw,150px);height:clamp(70px,18vw,90px);padding:10px 14px;}
+  .client-logo-card{width:clamp(130px,34vw,175px);height:clamp(75px,20vw,95px);padding:6px 10px;}
 }
 
 /* CLIENT NAMES & NETWORK */
@@ -1033,62 +1472,56 @@ img{max-width:100%;display:block;}
 @media(max-width:575px){.cert-gallery{grid-template-columns:repeat(2,1fr);}}
 
 .cert-glass-card{
-  position:relative;border-radius:20px;overflow:hidden;cursor:pointer;
-  background:var(--white);
-  border:1px solid var(--border-gold);
+  position:relative;border-radius:0px;overflow:hidden;cursor:pointer;
+  background:var(--navy);
+  border:4px solid var(--navy-soft);
+  outline:1px solid rgba(226,58,86,0.3);
+  outline-offset:-4px;
   box-shadow:var(--shadow-sm);
   transition:var(--transition);
   aspect-ratio:3/4;
 }
 .cert-glass-card::before{
-  content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent);
-  transform:skewX(-15deg);opacity:0;z-index:3;pointer-events:none;
-  transition:left 0.7s ease,opacity 0.3s ease;
+  content:'';position:absolute;inset:4px;
+  border:1px solid rgba(226,58,86,0.15);
+  pointer-events:none;z-index:3;
 }
-.cert-glass-card:hover::before{left:125%;opacity:1;}
 .cert-glass-card:hover{
-  transform:translateY(-10px) scale(1.02);
-  box-shadow:var(--shadow-gold-lg),0 0 0 1px rgba(226,58,86,0.45);
-  border-color:var(--gold);
+  transform:translateY(-5px);
+  box-shadow:var(--shadow-gold-lg);
+  border-color:var(--gold-deep);
+  outline-color:var(--gold);
 }
 
 .cert-glass-img{
   width:100%;height:100%;object-fit:contain!important;
-  background:var(--ivory);padding:10px;
+  background:var(--ivory);padding:20px;
   transition:transform 0.8s cubic-bezier(0.22,1,0.36,1);
   display:block;
 }
-.cert-glass-card:hover .cert-glass-img{transform:scale(1.05);}
+.cert-glass-card:hover .cert-glass-img{transform:scale(1.03);}
 
 .cert-overlay{
   position:absolute;inset:0;z-index:2;
-  background:linear-gradient(180deg,transparent 40%,rgba(18,11,46,0.72) 100%);
+  background:linear-gradient(180deg,transparent 20%,rgba(18,11,46,0.85) 100%);
   opacity:0;transition:opacity 0.45s ease;
-  display:flex;align-items:flex-end;padding:18px;
+  display:flex;align-items:flex-end;padding:24px;
 }
 .cert-glass-card:hover .cert-overlay{opacity:1;}
 .cert-overlay-content{
-  display:flex;align-items:center;justify-content:space-between;width:100%;
+  display:flex;align-items:center;justify-content:center;width:100%;
 }
 .cert-overlay-icon{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--gold);color:var(--white);
+  width:42px;height:42px;border-radius:0;
+  background:transparent;color:var(--gold);
+  border:1px solid var(--gold);
   display:flex;align-items:center;justify-content:center;
   font-size:1rem;
-  box-shadow:0 4px 14px rgba(226,58,86,0.6);
 }
 .cert-overlay-text{
-  font-family:var(--font-mono);font-size:0.68rem;
-  color:rgba(255,255,255,0.9);letter-spacing:0.08em;
-  text-transform:uppercase;
-}
-.cert-badge-corner{
-  position:absolute;top:12px;left:12px;z-index:4;
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(51,25,107,0.9);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:0.78rem;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  font-family:var(--font-mono);font-size:0.75rem;
+  color:var(--gold);letter-spacing:0.1em;
+  text-transform:uppercase; margin-right:12px;
 }
 
 .glightbox-container .gslide-image img{border-radius:12px;}
@@ -1137,7 +1570,7 @@ img{max-width:100%;display:block;}
 }
 .calc-input-wrap{position:relative;}
 .calc-input{
-  width:100%;padding:14px 50px 14px 16px;border-radius:12px;
+  width:100%;padding:14px 60px 14px 16px;border-radius:12px;
   border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);
   color:var(--white);font-family:var(--font-mono);font-size:1rem;transition:all 0.35s ease;
 }
@@ -1146,9 +1579,14 @@ img{max-width:100%;display:block;}
   box-shadow:0 0 0 4px rgba(226,58,86,0.15);
 }
 .calc-input.error{border-color:var(--gold);box-shadow:0 0 0 4px rgba(226,58,86,0.15);}
+/* Refined muted neutral/slate unit badges */
 .calc-unit{
   position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  font-family:var(--font-mono);font-size:0.75rem;color:var(--gold);pointer-events:none;
+  font-family:var(--font-mono);font-size:0.72rem;font-weight:600;
+  color:rgba(250,249,252,0.65);background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+  padding:3px 8px;border-radius:6px;
+  pointer-events:none;
 }
 .calc-error-msg{font-size:0.74rem;color:#E8967A;margin-top:6px;min-height:14px;font-family:var(--font-mono);}
 .calc-density-row{display:flex;gap:10px;}
@@ -1174,9 +1612,9 @@ img{max-width:100%;display:block;}
   padding-bottom:14px;border-bottom:1px dashed rgba(255,255,255,0.12);
 }
 .calc-result-row:last-of-type{border-bottom:none;padding-bottom:0;}
-.calc-result-row .rlab{font-size:0.85rem;color:rgba(250,249,252,0.68);}
+.calc-result-row .rlab{font-size:0.88rem;font-weight:500;color:rgba(250,249,252,0.78);}
 .calc-result-row .rval{
-  font-family:var(--font-mono);font-size:1.7rem;font-weight:700;color:var(--gold);
+  font-family:var(--font-mono);font-size:1.85rem;font-weight:700;color:var(--gold);
 }
 .calc-result-row .rval span.unit{font-size:0.95rem;color:rgba(250,249,252,0.55);margin-left:4px;}
 .calc-pdf-btn{width:100%;margin-top:8px;justify-content:center;}
@@ -1382,10 +1820,49 @@ html.lenis{height:auto;}
   </div>
 </div>
 
-<!-- PAGE TRANSITION OVERLAY -->
-<div id="pageTransitionOverlay">
-  <img src="images/logo.jpeg" alt="Safe Solutions" class="pto-logo">
-  <div class="pto-text">SAFE SOLUTIONS</div>
+<script>
+/* Isolated Preloader Safety Fallback - Independent failsafe timer */
+(function() {
+  function forceDismissPreloader() {
+    var pre = document.getElementById('preloader');
+    if (pre) {
+      pre.classList.add('loaded');
+      pre.style.setProperty('opacity', '0', 'important');
+      pre.style.setProperty('visibility', 'hidden', 'important');
+      pre.style.setProperty('pointer-events', 'none', 'important');
+      setTimeout(function() {
+        pre.style.setProperty('display', 'none', 'important');
+      }, 500);
+    }
+    document.body.style.overflow = '';
+  }
+  // Hard safety fallback timer at 3.8s max
+  var fallbackTimer = setTimeout(forceDismissPreloader, 3800);
+  window.addEventListener('load', function() {
+    setTimeout(forceDismissPreloader, 1000);
+  });
+})();
+</script>
+
+<!-- PAGE TRANSITION OVERLAY — ARCHITECTURAL 3D CUBE (REFERENCE #6) -->
+<div id="pageTransitionOverlay" aria-hidden="true">
+  <div class="pto-cube-wrapper">
+    <div class="pto-scene">
+      <div class="pto-cube">
+        <div class="pto-cube-face pto-cube-top"></div>
+        <div class="pto-cube-face pto-cube-bottom"></div>
+        <div class="pto-cube-face pto-cube-left"></div>
+        <div class="pto-cube-face pto-cube-right"></div>
+        <div class="pto-cube-face pto-cube-front"></div>
+        <div class="pto-cube-face pto-cube-back"></div>
+        <div class="pto-cube-core"></div>
+      </div>
+    </div>
+    <div class="pto-status-text">
+      <span class="pto-brand-text">SAFE SOLUTIONS</span>
+      <span class="pto-arch-label">HOUSE OF CONSTRUCTION SOLUTIONS</span>
+    </div>
+  </div>
 </div>
 
 <!-- NAVBAR -->
@@ -1402,7 +1879,123 @@ html.lenis{height:auto;}
       <span class="nav-close" id="navClose"><i class="fa-solid fa-xmark"></i></span>
       <li><a href="#home" class="nav-link-item">Home</a></li>
       <li><a href="#about" class="nav-link-item">About</a></li>
-      <li><a href="#products" class="nav-link-item">Products</a></li>
+      <li class="nav-item-has-dropdown" id="navProductsDropdownItem">
+        <a href="#products" class="nav-link-item nav-dropdown-trigger" id="navProductsTrigger">
+          Products <i class="fa-solid fa-chevron-down nav-caret"></i>
+        </a>
+        <div class="nav-products-dropdown" id="navProductsDropdown">
+          <div class="nav-products-dropdown-inner">
+            <div class="nav-dropdown-header">
+              <span>PRODUCT CATEGORIES</span>
+              <span class="badge-cat-count">17 Categories</span>
+            </div>
+            <div class="nav-category-list">
+              <a href="#products" class="nav-cat-row" data-cat="concrete-admixtures">
+                <span class="ncat-icon"><i class="fa-solid fa-flask"></i></span>
+                <span class="ncat-num">01.</span>
+                <span class="ncat-name">Concrete Admixtures</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="waterproofing">
+                <span class="ncat-icon"><i class="fa-solid fa-droplet"></i></span>
+                <span class="ncat-num">02.</span>
+                <span class="ncat-name">Waterproofing</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="grout-anchoring">
+                <span class="ncat-icon"><i class="fa-solid fa-anchor"></i></span>
+                <span class="ncat-num">03.</span>
+                <span class="ncat-name">Grout &amp; Anchoring</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="asphalt-emulsion">
+                <span class="ncat-icon"><i class="fa-solid fa-road"></i></span>
+                <span class="ncat-num">04.</span>
+                <span class="ncat-name">Asphalt Emulsion</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="surface-treatments">
+                <span class="ncat-icon"><i class="fa-solid fa-broom"></i></span>
+                <span class="ncat-num">05.</span>
+                <span class="ncat-name">Surface Treatments</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="concrete-repairs">
+                <span class="ncat-icon"><i class="fa-solid fa-trowel"></i></span>
+                <span class="ncat-num">06.</span>
+                <span class="ncat-name">Concrete Repairs</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="industrial-flooring">
+                <span class="ncat-icon"><i class="fa-solid fa-layer-group"></i></span>
+                <span class="ncat-num">07.</span>
+                <span class="ncat-name">Industrial Flooring</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="adhesives">
+                <span class="ncat-icon"><i class="fa-solid fa-link"></i></span>
+                <span class="ncat-num">08.</span>
+                <span class="ncat-name">Adhesives</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="protective-coatings">
+                <span class="ncat-icon"><i class="fa-solid fa-shield"></i></span>
+                <span class="ncat-num">09.</span>
+                <span class="ncat-name">Protective Coatings</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="sealants">
+                <span class="ncat-icon"><i class="fa-solid fa-fill-drip"></i></span>
+                <span class="ncat-num">10.</span>
+                <span class="ncat-name">Sealants</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="tile-fixing">
+                <span class="ncat-icon"><i class="fa-solid fa-border-all"></i></span>
+                <span class="ncat-num">11.</span>
+                <span class="ncat-name">Tile Fixing &amp; Adhesives</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="epoxy-tile-grout">
+                <span class="ncat-icon"><i class="fa-solid fa-border-all"></i></span>
+                <span class="ncat-num">12.</span>
+                <span class="ncat-name">Epoxy Tile Grout</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="repairs-retrofitting">
+                <span class="ncat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                <span class="ncat-num">13.</span>
+                <span class="ncat-name">Repairs &amp; Retrofitting</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="crack-repair">
+                <span class="ncat-icon"><i class="fa-solid fa-syringe"></i></span>
+                <span class="ncat-num">14.</span>
+                <span class="ncat-name">Crack Repairing &amp; Injection</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="bituminous-membranes">
+                <span class="ncat-icon"><i class="fa-solid fa-layer-group"></i></span>
+                <span class="ncat-num">15.</span>
+                <span class="ncat-name">Bituminous Membranes</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="polyurethane-waterproofing">
+                <span class="ncat-icon"><i class="fa-solid fa-droplet"></i></span>
+                <span class="ncat-num">16.</span>
+                <span class="ncat-name">Polyurethane Liquid Waterproofing</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="epoxy-flooring">
+                <span class="ncat-icon"><i class="fa-solid fa-brush"></i></span>
+                <span class="ncat-num">17.</span>
+                <span class="ncat-name">Epoxy Flooring</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
       <li><a href="#projects" class="nav-link-item">Projects</a></li>
       <li><a href="#calculators" class="nav-link-item">Calculators</a></li>
       <li><a href="#certificates" class="nav-link-item">Certificates</a></li>
@@ -1500,7 +2093,7 @@ html.lenis{height:auto;}
     <!-- CEO MESSAGE — STRICTLY USES message.jpeg AS SINGLE VISUAL -->
     <div class="ceo-section" data-aos="fade-up">
       <div class="eyebrow">MESSAGE FROM LEADERSHIP</div>
-      <h2 style="margin:14px 0 36px;">A Message from Our CEO</h2>
+      <h2 style="margin:14px 0 30px;">A Message from Our CEO</h2>
       <div class="ceo-grid">
         <div class="ceo-image-wrap">
           <img src="images/message.jpeg" alt="CEO — Safe Solutions" loading="lazy">
@@ -1508,9 +2101,21 @@ html.lenis{height:auto;}
         </div>
         <div class="ceo-content">
           <p class="ceo-quote">At Safe Solutions, we believe that the strength of a structure begins with the quality of the materials that go into it. For over two decades, we have been committed to providing Pakistan's construction industry with products and solutions that engineers and contractors can rely on — project after project, decade after decade.</p>
+          <div class="ceo-pillar-points">
+            <div class="ceo-pillar"><i class="fa-solid fa-shield-halved"></i> Structural Durability &amp; Engineering Integrity</div>
+            <div class="ceo-pillar"><i class="fa-solid fa-flask-vial"></i> On-Site Quality Assurance &amp; Field Support</div>
+            <div class="ceo-pillar"><i class="fa-solid fa-handshake"></i> Long-Term Partnerships Across Pakistan</div>
+          </div>
           <div class="ceo-divider"></div>
-          <div class="ceo-name">CEO</div>
-          <div class="ceo-title">Safe Solutions — House of Construction Solutions</div>
+          <div class="ceo-meta-footer">
+            <div>
+              <div class="ceo-name">Chief Executive Officer</div>
+              <div class="ceo-title">Safe Solutions — House of Construction Solutions</div>
+            </div>
+            <div class="ceo-brand-seal" title="Safe Solutions Quality Seal">
+              <i class="fa-solid fa-award"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1527,16 +2132,27 @@ html.lenis{height:auto;}
     <div class="section-head" data-aos="fade-up">
       <div class="eyebrow">PRODUCTS &amp; TECHNICAL APPLICATIONS</div>
       <h2>Engineered formulations &amp; technical services for every build.</h2>
-      <p>Explore our complete product catalog and specialized engineering testing services below. Tap any card to view detailed specifications, benefits, and real project application photos.</p>
+      <p>Explore our complete product catalog and specialized engineering solutions below. Use the <strong>Products</strong> menu in the navigation bar above or switch between detailed specification and full grid views below.</p>
+      
+      <!-- VIEW SWITCHER: DETAILED LIST VIEW / GRID VIEW -->
+      <div class="products-view-switcher">
+        <button type="button" class="view-switch-btn active" id="btnViewList" aria-label="Detailed List View">
+          <i class="fa-solid fa-list-ul"></i><span>Detailed View</span>
+        </button>
+        <button type="button" class="view-switch-btn" id="btnViewGrid" aria-label="Grid View">
+          <i class="fa-solid fa-table-cells-large"></i><span>Grid View (All 17)</span>
+        </button>
+      </div>
     </div>
 
-    <div class="products-cat-tabs" data-aos="fade-up" data-aos-delay="50">
-      <div class="products-cat-tab active" data-pcat="all">All Solutions</div>
-      <div class="products-cat-tab" data-pcat="products">Products &amp; Applications</div>
-      <div class="products-cat-tab" data-pcat="services">Technical &amp; Testing Services</div>
-    </div>
+    <!-- MAIN PRODUCT DISPLAY AREA (FULL-WIDTH LUXURY ARCHITECTURE) -->
+    <div class="products-display-wrapper" data-aos="fade-up" data-aos-delay="50">
+      <!-- Selected Category Presentation Card (Default: Concrete Admixtures) -->
+      <div id="productSelectedView" class="product-selected-view"></div>
 
-    <div class="products-grid" id="productsGrid"></div>
+      <!-- Product Grid (Full Catalog View) -->
+      <div class="products-grid" id="productsGrid" style="display:none;"></div>
+    </div>
   </div>
 </section>
 
@@ -1571,15 +2187,10 @@ html.lenis{height:auto;}
 
         <!-- SELECTED APPLICATIONS (PROJECT WORK PHOTOS) -->
         <div class="mt-4 mb-4">
-          <div class="eyebrow mb-2">SELECTED APPLICATIONS</div>
+          <div class="eyebrow mb-2">APPLICATION PHOTOGRAPHS</div>
           <h4 style="font-size:1.1rem;color:var(--navy);margin-bottom:14px;">Real Project Applications</h4>
-          <div class="row g-3" id="pModalProjectPhotos">
-            <div class="col-6">
-              <img id="pModalProjImg" src="images/Project-Chiniot-Power-Plant.jpeg" alt="Selected Application" class="detail-modal-project-img">
-            </div>
-            <div class="col-6">
-              <img id="pModalProjImg2" src="images/Project-WASA-Reservoir.jpeg" alt="Selected Application" class="detail-modal-project-img">
-            </div>
+          <div class="row g-3" id="pModalAppImages">
+            <!-- Dynamically populated -->
           </div>
         </div>
 
@@ -1793,10 +2404,10 @@ html.lenis{height:auto;}
             </div>
           </div>
           <div class="calc-results">
-            <div class="calc-result-row"><span class="rlab">Grout Required (Weight)</span><span class="rval" id="grout-kg">—<span class="unit">kg</span></span></div>
             <div class="calc-result-row"><span class="rlab">Grout Required (Volume)</span><span class="rval" id="grout-l">—<span class="unit">L</span></span></div>
+            <div class="calc-result-row"><span class="rlab">Grout Required (Weight)</span><span class="rval" id="grout-kg">—<span class="unit">kg</span></span></div>
             <button class="btn-luxury btn-gold calc-pdf-btn" onclick="generatePDF('grout')"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</button>
-            <div class="calc-note">Industry formula: Volume (L/m²) = (L+W)/(L×W) × Joint Width × Tile Thickness × 1000 × 1.07. Weight = Volume × Density. Matches professional tile grout standards.</div>
+            <div class="calc-note">Calculated in accordance with Safe Solutions engineering standards and verified reference formulas. Volume (L) = (L+W)/(L×W) × Joint × Thickness × Area. Weight (kg) = Volume × Density.</div>
           </div>
         </div>
       </div>
@@ -2107,32 +2718,220 @@ const heroSlides = [
   {img:"images/Hero-08.jpeg",fallback:"https://images.unsplash.com/photo-1508873696983-2df515122519?q=80&w=2400&auto=format&fit=crop",title:"House of <em>Construction</em><br>Solutions",sub:"Delivering Pakistan's most dependable construction chemical products, project after project, decade after decade."}
 ];
 
-/* ─── 21 OFFICIAL PRODUCTS & TECHNICAL SERVICES ─── */
-const productsData = [
-  // Products & Applications (1-13)
-  {id:"admixtures", img:"images/Admixture.jpeg", name:"Concrete Admixtures", icon:"fa-flask", cat:"products", desc:"Concrete performance enhancers designed to improve strength, workability, durability and performance.", benefits:["Improved compressive strength","Better workability & slump retention","Reduced water demand","Faster setting & early strength gain"], applications:["High-rise structural slabs","Ready-mix concrete plants","Precast concrete elements","Infrastructure & bridge decks"], tech:"Compliant with ASTM C494 / BS EN 934-2. Available in Types A through G for targeted performance outcomes.", usage:"Dose at 0.2–1.5% by cement weight. Consult our technical team for project-specific mix designs.", projectImg:"images/Project-Chiniot-Power-Plant.jpeg"},
-  {id:"waterproofing", img:"images/Waterproofing.jpeg", name:"Waterproofing Systems & Products", icon:"fa-droplet", cat:"products", desc:"Complete moisture protection systems for basements, roofs, water reservoirs and podiums.", benefits:["100% monolithic water barrier","High crack-bridging capability","UV & weathering resistance","Long-term structural protection"], applications:["Rooftops, terraces & podiums","Basement walls & raft slabs","Water storage reservoirs & tanks","Planter boxes & wet areas"], tech:"Available in crystalline, cementitious, liquid-applied polyurethane and torch-on membrane systems. Tested to DIN 18195.", usage:"Surface must be sound, clean and SSD. Apply minimum 2 coats at right-angles.", projectImg:"images/Project-WASA-Reservoir.jpeg"},
-  {id:"repair", img:"images/Concrete-Repair.jpeg", name:"Concrete Repair Products", icon:"fa-trowel", cat:"products", desc:"Structural repair mortars and patch compounds for restoring damaged concrete elements.", benefits:["High bond strength (>2.5 MPa)","Low shrinkage formulation","Chloride-free and non-corrosive","Thixotropic for overhead applications"], applications:["Spalled concrete columns & beams","Carbonated concrete cover restoration","Industrial floor patch repairs","Marine & bridge structures"], tech:"EN 1504-3 class R3/R4 compliant. Compressive strength >45 MPa at 28 days.", usage:"Remove damaged concrete to sound substrate. Prime and apply mortar in layers up to 25mm.", projectImg:"images/Project-Malik-MIJ-M3.jpeg"},
-  {id:"hardeners", img:"images/Surface-Treatments.jpeg", name:"Concrete Floor Hardeners & Floor Coatings", icon:"fa-broom", cat:"products", desc:"Liquid silicate hardeners and protective coats extending the abrasion life of exposed slabs.", benefits:["Increased surface hardness (Mohs >7)","Dust-proofing & oil resistance","Reduces tire mark staining","Easy application & maintenance"], applications:["Warehouse floors & logistics hubs","Manufacturing facilities","Multi-story parking decks","Commercial showrooms"], tech:"Sodium & lithium silicate systems. Deep penetration up to 8mm into concrete pores.", usage:"Apply to cured concrete. Saturate surface for 30 min then squeegee excess.", projectImg:"images/Project-Metro-Cash-Carry.jpeg"},
-  {id:"flooring", img:"images/Flooring-Systems.jpeg", name:"Resin, Epoxy & PU Flooring Systems", icon:"fa-layer-group", cat:"products", desc:"Heavy-duty industrial and decorative resin flooring for extreme mechanical and chemical exposure.", benefits:["Superior abrasion & impact resistance","Seamless, hygienic & dust-free","High chemical resistance","Fast return to operational service"], applications:["Factories & processing plants","Pharmaceutical cleanrooms","Commercial retail floors","Hospitals & laboratories"], tech:"Self-levelling epoxy, polyurethane mortar and ESD flooring. Shore D hardness >80.", usage:"Substrate moisture must be <4%. Prime with epoxy primer prior to body coat application.", projectImg:"images/Project-ACEG-PIJV.jpeg"},
-  {id:"adhesives", img:"images/Adhesives.jpeg", name:"Adhesives & Bonding Agents", icon:"fa-link", cat:"products", desc:"High-strength latex and epoxy bonding agents for concrete joins, tiles and cladding.", benefits:["Exceptional tensile adhesion","Extended open time","Vibration & thermal shock resistant","Water-resistant bond line"], applications:["Bonding old to new concrete","Heavy ceramic & porcelain tiling","Marble & granite wall cladding","Structural cold joint bonding"], tech:"EN 12004 C2 TE S1/S2 grades. Tensile adhesion strength >1.5 N/mm².", usage:"Apply using notched trowel or brush onto clean substrate. Do not exceed open time.", projectImg:"images/Project-RCG-Mall.jpeg"},
-  {id:"sealants", img:"images/Sealants.jpeg", name:"Construction & Expansion/Contraction Joint Sealants", icon:"fa-fill-drip", cat:"products", desc:"Elastomeric joint sealants designed for dynamic movement and weatherproofing.", benefits:["±25% to ±50% movement capability","UV, ozone & chemical stability","Excellent adhesion without primer","Non-sag formula for vertical joints"], applications:["Façade expansion joints","Concrete pavement control joints","Curtain wall perimeters","Waterproofing joint seals"], tech:"Polyurethane, MS Polymer and silicone grades. ISO 11600 F-25LM compliant.", usage:"Joint depth to width ratio 1:2. Tool within 10 minutes of extrusion.", projectImg:"images/Project-Treat-Battery-M3.jpeg"},
-  {id:"waterstoppers", img:"images/Water-Stoppers.jpeg", name:"Water Stoppers", icon:"fa-water", cat:"products", desc:"PVC, rubber and hydrophilic waterstops for sealing construction and movement joints.", benefits:["High hydrostatic pressure resistance","Accommodates joint movement","Expansion up to 300% (hydrophilic)","Durable PVC formulation"], applications:["Basement raft & wall joints","Water treatment tanks & dams","Underpasses & retaining walls","Tunnels & box culverts"], tech:"PVC profiles 200–320mm width. Tensile strength >14 MPa. Hydrophilic bentonite/rubber strips.", usage:"Center accurately in joint formwork. Secure tightly to rebar before concrete pour.", projectImg:"images/Project-NLC-Underpass.jpeg"},
-  {id:"anchoring", img:"images/Anchoring-Grouting.jpeg", name:"Steel Anchoring & Grouting Systems", icon:"fa-anchor", cat:"products", desc:"Non-shrink precision grouts and chemical anchors for heavy machinery and structural rebar.", benefits:["Zero shrinkage / controlled expansion","Ultra-high early & ultimate strength","Flowable & pumpable placement","Corrosion inhibited"], applications:["Heavy generator & turbine bases","Structural column baseplates","Post-installed rebar anchoring","Precast concrete connections"], tech:"Compressive strength >65 MPa at 28 days. Conforms to BS EN 1504-6 and ASTM C1107.", usage:"Mix mechanically with clean water. Pour or pump continuously from one side.", projectImg:"images/Project-Orient-Energy.jpeg"},
-  {id:"tile-grouts", img:"images/Adhesives.jpeg", name:"Tile Adhesives & Tile Grouts (Cementitious & Epoxy-Based)", icon:"fa-border-all", cat:"products", desc:"High-performance tile adhesives and stain-resistant epoxy & polymer-modified grouts.", benefits:["Stain proof & water repellent","Flexible joint capability","Vibrant color retention","Easy cleanup during application"], applications:["Commercial mall concourses","Swimming pools & fountains","Industrial kitchen floors","Residential bath & kitchen tiling"], tech:"RG class epoxy grouts and CG2WA cementitious grouts per ISO 13007.", usage:"Fill joints completely using rubber float. Clean surplus within 30 minutes.", projectImg:"images/Project-Misaq-Mall.jpeg"},
-  {id:"bitumen-emulsion", img:"images/Bitumen-Emulsion.jpeg", name:"Bitumen Emulsion & Hot Bitumen (10/20, 60/70, 80/100)", icon:"fa-road", cat:"products", desc:"Penetration-grade hot bitumens and cold-applied cationic/anionic bitumen emulsions.", benefits:["Cold application convenience","Excellent binder adhesion","Fast breaking time","Durable waterproofing barrier"], applications:["Road pavement sub-base sealing","Foundation damp-proofing","Bridge deck waterproofing","Cold-mix asphalt maintenance"], tech:"Bitumen content 55–70%. Penetration grades 10/20, 60/70, 80/100 per ASTM D946.", usage:"Spray or brush at specified coverage rate. Protect from traffic until broken.", projectImg:"images/Project-Treat-Battery-M3.jpeg"},
-  {id:"torch-membranes", img:"images/Torch-Membranes.jpeg", name:"Bituminous Membranes (Torch-Applied & Self-Adhesive)", icon:"fa-fire-flame-curved", cat:"products", desc:"SBS/APP modified bituminous waterproofing membranes reinforced with spunbond polyester.", benefits:["High tensile & tear strength","Flexible at sub-zero temperatures","Puncture & foot-traffic resistant","Torch or self-adhesive application"], applications:["Flat roofs & green roofs","Foundation basements & tanking","Bridge decks & viaducts","Podium slabs & wet areas"], tech:"Thickness 3mm–5mm. Reinforcement 160–250 g/m² polyester. Heat resistance up to 130°C.", usage:"Unroll, align, and torch undersurface until bitumen glistens. Overlap min 100mm.", projectImg:"images/Project-Liberty-Power-Plant.jpeg"},
-  {id:"prime-tack", img:"images/Prime-Coat.jpeg", name:"Bituminous Prime Coat, Tack Coat & Asphalt Crack Fillers", icon:"fa-paint-roller", cat:"products", desc:"Rapid-setting bitumen primers, inter-layer tack coats, and rubberized hot pour joint fillers.", benefits:["Deep penetration into granular bases","Ensures strong inter-layer bond","Prevents asphalt delamination","Flexible crack sealing"], applications:["Road construction prime coats","Asphalt overlay tack coats","Motorway crack repairs","Runway maintenance"], tech:"RS-1 / SS-1h cationic emulsions. Application rate 0.25–1.0 L/m².", usage:"Apply on clean, dust-free surface using pressure distributor or hand sprayer.", projectImg:"images/Project-Malik-MIJ-M3.jpeg"},
+/*
+========================================================
+SAFE SOLUTIONS PRODUCT APPLICATION IMAGE MAP
+========================================================
 
-  // Technical & Testing Services (14-21)
-  {id:"ferroscan", img:"images/Concrete-Repair.jpeg", name:"Ferroscan Surveys & Reinforcement Detection", icon:"fa-radar", cat:"services", desc:"Non-destructive electromagnetic scanning to map rebar depth, diameter, cover, and spacing inside concrete.", benefits:["Accurate rebar depth & size mapping","Prevents rebar damage during coring","3D structural scan reports","Conforms to international NDT standards"], applications:["Pre-coring & structural audits","Bridge & building assessment","Renovation & retrofitting planning","Quality assurance on fresh pours"], tech:"Hilti Ferroscan / Ground Penetrating Radar (GPR) technology. Depth accuracy ±2mm.", usage:"Scan surface grid pattern; output digital report with cover depth and bar arrangement.", projectImg:"images/Project-Chiniot-Power-Plant.jpeg"},
-  {id:"ndt-testing", img:"images/Surface-Treatments.jpeg", name:"Non-Destructive Testing (NDT) & Concrete Testing", icon:"fa-microscope", cat:"services", desc:"Comprehensive on-site NDT testing to evaluate concrete strength, uniformity, cracks, and void structures.", benefits:["Zero structural damage","Immediate field test results","Statistical strength verification","Early identification of voiding"], applications:["Industrial plant structural audits","Infrastructure quality control","Post-fire structural evaluation","Heritage structure assessment"], tech:"Ultrasonic Pulse Velocity (UPV), Covermeter, and Resitivity testing per BS 1881 / ASTM C597.", usage:"On-site testing conducted by certified structural engineers with detailed laboratory reporting.", projectImg:"images/Project-Orient-Energy.jpeg"},
-  {id:"rebound-hammer", img:"images/Concrete-Repair.jpeg", name:"Rebound Hammer (Schmidt Hammer) Testing", icon:"fa-hammer", cat:"services", desc:"Rapid field hardness testing to assess compressive strength uniformity across concrete elements.", benefits:["Instant compressive strength estimation","Cost-effective quality check","Evaluates in-situ concrete hardness","Covers large structural surface areas"], applications:["Quality control of concrete pours","Formwork removal assessment","Structural condition surveys","Comparing concrete batches"], tech:"Digital Schmidt Rebound Hammer Type N. Conforms to ASTM C805 / BS EN 12504-2.", usage:"Take 10–12 impacts on smooth, un-weathered surface grid. Calculate mean rebound number.", projectImg:"images/Project-Liberty-Power-Plant.jpeg"},
-  {id:"core-cutting", img:"images/Concrete-Repair.jpeg", name:"Core Cutting & Core Compression Testing", icon:"fa-circle-notch", cat:"services", desc:"Precision diamond core drilling and laboratory crushing tests to measure exact in-situ concrete compressive strength.", benefits:["Definitive concrete strength measurement","Clean diamond precision core cuts","Lab certified crushing reports","Minimal disturbance to surround"], applications:["Verifying low cube test results","Structural adequacy audits","Installing utility penetration holes","Anchor bolt pull-out preparation"], tech:"Diamond core barrel 50–150mm dia. Lab testing in calibrated compression machine per ASTM C42.", usage:"Extract cores, trim ends, cap, density test, and crush under calibrated load rate.", projectImg:"images/Project-WASA-Reservoir.jpeg"},
-  {id:"retrofitting", img:"images/Anchoring-Grouting.jpeg", name:"Retrofitting & Structural Strengthening", icon:"fa-shield-heart", cat:"services", desc:"Advanced structural upgrade services using Carbon Fiber (CFRP), steel jacketing, and section enlargement.", benefits:["Increases load carrying capacity","Extends service life of old structures","Minimal weight addition (CFRP)","Fast execution with minimal shutdown"], applications:["Seismic upgrades for buildings","Bridge beam flexural strengthening","Column confinement & load increase","Slab cut-out reinforcement"], tech:"High-modulus CFRP laminates & fabrics. Epoxy resin impregnation systems tested to ACI 440.2R.", usage:"Prepare surface by grit blasting. Apply epoxy primer, saturant, and carbon fiber fabric.", projectImg:"images/Project-ACEG-PIJV.jpeg"},
-  {id:"restoration", img:"images/Concrete-Repair.jpeg", name:"Concrete Repair & Restoration", icon:"fa-screwdriver-wrench", cat:"services", desc:"Specialized rehabilitation of damaged, spalled, carbonated or corroded structural concrete.", benefits:["Stops active reinforcement corrosion","Restores original design strength","Protects against future ingress","Extends structural lifespan by decades"], applications:["Marine jetties & bridge piers","Industrial plant structures","Multi-story building repairs","Water retention structures"], tech:"Polymer-modified repair mortars, cathodic protection, and migrating corrosion inhibitors.", usage:"Chisel out unsound concrete, clean rebar, prime, apply structural repair mortar.", projectImg:"images/Project-Metro-Cash-Carry.jpeg"},
-  {id:"consultancy", img:"images/Admixture.jpeg", name:"Technical Consultancy & Application Support", icon:"fa-user-gear", cat:"services", desc:"Expert technical guidance, specification drafting, material selection, and on-site application supervision.", benefits:["Tailored technical specifications","Prevents costly material misuse","On-site quality monitoring","Single point of technical contact"], applications:["Engineering design consultants","Main contractors & developers","Government infrastructure projects","Industrial plant owners"], tech:"Provided by senior structural & chemical engineers with 20+ years Pakistan industry experience.", usage:"Site visits, specification writing, mock-up trials, and applicator training sessions.", projectImg:"images/Project-Chiniot-Power-Plant.jpeg"},
-  {id:"supplies", img:"images/Sealants.jpeg", name:"General Order Supplies", icon:"fa-boxes-packing", cat:"services", desc:"Bulk supply and procurement of specialized construction materials, tools, and industrial chemicals.", benefits:["Reliable supply chain delivery","Competitive bulk pricing","Guaranteed authentic materials","On-time site dispatch"], applications:["Major infrastructure sites","Commercial project contractors","Industrial maintenance teams","Government tender orders"], tech:"Direct factory sourcing and quality-verified inventory management across Pakistan.", usage:"Contact our sales desk for volume pricing and site delivery scheduling.", projectImg:"images/Project-RCG-Mall.jpeg"}
+CONCRETE_ADMIXTURES_01 = images/Admixture.jpeg
+CONCRETE_ADMIXTURES_02 = (NEEDS IMAGE)
+CONCRETE_ADMIXTURES_03 = (NEEDS IMAGE)
+
+WATERPROOFING_01 = images/Waterproofing.jpeg
+WATERPROOFING_02 = images/Torch-Membranes.jpeg
+WATERPROOFING_03 = images/Water-Stoppers.jpeg
+
+GROUT_ANCHORING_01 = images/Anchoring-Grouting.jpeg
+GROUT_ANCHORING_02 = (NEEDS IMAGE)
+GROUT_ANCHORING_03 = (NEEDS IMAGE)
+
+ASPHALT_EMULSION_01 = images/Bitumen-Emulsion.jpeg
+ASPHALT_EMULSION_02 = images/Hot-Bitumen.jpeg
+ASPHALT_EMULSION_03 = images/Tack-Coat.jpeg
+
+SURFACE_TREATMENTS_01 = images/Surface-Treatments.jpeg
+SURFACE_TREATMENTS_02 = (NEEDS IMAGE)
+SURFACE_TREATMENTS_03 = (NEEDS IMAGE)
+
+CONCRETE_REPAIRS_01 = (NEEDS IMAGE)
+CONCRETE_REPAIRS_02 = (NEEDS IMAGE)
+CONCRETE_REPAIRS_03 = (NEEDS IMAGE)
+
+INDUSTRIAL_FLOORING_01 = images/Flooring-Systems.jpeg
+INDUSTRIAL_FLOORING_02 = (NEEDS IMAGE)
+INDUSTRIAL_FLOORING_03 = (NEEDS IMAGE)
+
+ADHESIVES_01 = images/Adhesives.jpeg
+ADHESIVES_02 = (NEEDS IMAGE)
+ADHESIVES_03 = (NEEDS IMAGE)
+
+PROTECTIVE_COATINGS_01 = images/Protective-Coatings.jpeg
+PROTECTIVE_COATINGS_02 = (NEEDS IMAGE)
+PROTECTIVE_COATINGS_03 = (NEEDS IMAGE)
+
+SEALANTS_01 = images/Sealants.jpeg
+SEALANTS_02 = (NEEDS IMAGE)
+SEALANTS_03 = (NEEDS IMAGE)
+
+TILE_FIXING_01 = images/Adhesives.jpeg
+TILE_FIXING_02 = (NEEDS IMAGE)
+TILE_FIXING_03 = (NEEDS IMAGE)
+
+EPOXY_TILE_GROUT_01 = (NEEDS IMAGE)
+EPOXY_TILE_GROUT_02 = (NEEDS IMAGE)
+EPOXY_TILE_GROUT_03 = (NEEDS IMAGE)
+
+REPAIRS_RETROFITTING_01 = (NEEDS IMAGE)
+REPAIRS_RETROFITTING_02 = (NEEDS IMAGE)
+REPAIRS_RETROFITTING_03 = (NEEDS IMAGE)
+
+CRACK_REPAIR_INJECTION_01 = (NEEDS IMAGE)
+CRACK_REPAIR_INJECTION_02 = (NEEDS IMAGE)
+CRACK_REPAIR_INJECTION_03 = (NEEDS IMAGE)
+
+BITUMINOUS_MEMBRANES_01 = images/Torch-Membranes.jpeg
+BITUMINOUS_MEMBRANES_02 = images/Prime-Coat.jpeg
+BITUMINOUS_MEMBRANES_03 = (NEEDS IMAGE)
+
+POLYURETHANE_WATERPROOFING_01 = images/Waterproofing.jpeg
+POLYURETHANE_WATERPROOFING_02 = (NEEDS IMAGE)
+POLYURETHANE_WATERPROOFING_03 = (NEEDS IMAGE)
+
+EPOXY_FLOORING_01 = images/Flooring-Systems.jpeg
+EPOXY_FLOORING_02 = (NEEDS IMAGE)
+EPOXY_FLOORING_03 = (NEEDS IMAGE)
+
+Only use actual files from images/.
+========================================================
+*/
+
+const productsData = [
+  {id:"concrete-admixtures", img:"images/Admixture.jpeg", name:"Concrete Admixtures", icon:"fa-flask", cat:"products", desc:"High-performance concrete plasticisers, retarders, accelerators and strength enhancers designed to optimize workability, slump retention and compressive strength in structural pours.", subcategories:["Water Reducing Plasticizers","Superplasticizers & Hyperplasticizers","Retarders & Set Accelerators","Air Entraining & Waterproofing Admixtures"], benefits:["Significantly higher compressive strength","Extended slump retention & workability","Reduced water-cement ratio","Enhanced durability against chemical attack"], applications:["High-rise structural columns and slabs","Mass concrete pours and foundation rafts","Ready-mix batching plants","Precast concrete elements"], tech:"ASTM C494 Type A, D, F & G compliant.", usage:"Dosage typically 0.4% to 1.5% by weight of cement, dispersed in gauging water.", appImages:[
+    // CONCRETE ADMIXTURES — APPLICATION IMAGE 1
+    {src:"images/Admixture.jpeg", alt:"Concrete Admixture In-situ Pour"},
+    // CONCRETE ADMIXTURES — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Hero-01.jpeg", alt:"Structural Slab Concrete Batching"},
+    // CONCRETE ADMIXTURES — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Hero-05.jpeg", alt:"Infrastructure Foundation Pour"}
+  ]},
+  {id:"waterproofing", img:"images/Waterproofing.jpeg", name:"Waterproofing", icon:"fa-droplet", cat:"products", desc:"Comprehensive moisture barrier systems engineered for total subterranean, structural and rooftop protection against water ingress and hydrostatic pressure.", subcategories:["Chemical Waterproofing","Torch Applied Waterproofing","Hot & Cold Waterproofing","Bitumen Waterproofing","Bituminous Membranes","Polyurethane Liquid Applied Waterproofing & Insulation Membrane"], benefits:["Monolithic barrier against moisture ingress","High elastomeric crack-bridging capability","Thermal and UV weathering resistance","Superior puncture and root resistance"], applications:["Chemical Waterproofing for subterranean basements","Torch Applied Waterproofing for exposed roof decks","Hot & Cold Waterproofing for foundation walls","Bitumen Waterproofing for water retaining structures"], tech:"Conforms to DIN 18195 and ASTM D5147 standards.", usage:"Apply over clean, primed concrete substrate with recommended 100mm overlaps.", appImages:[
+    // WATERPROOFING — APPLICATION IMAGE 1
+    {src:"images/Waterproofing.jpeg", alt:"Waterproofing Application"},
+    // WATERPROOFING — APPLICATION IMAGE 2
+    {src:"images/Torch-Membranes.jpeg", alt:"Torch Applied Membranes"},
+    // WATERPROOFING — APPLICATION IMAGE 3
+    {src:"images/Water-Stoppers.jpeg", alt:"Water Stoppers & Joint Seals"}
+  ]},
+  {id:"grout-anchoring", img:"images/Anchoring-Grouting.jpeg", name:"Grout & Anchoring", icon:"fa-anchor", cat:"products", desc:"Non-shrink precision grouting and structural high-load anchoring systems engineered for Steel Anchoring and Heavy Machine Equipment installations.", subcategories:["Steel Anchoring","Heavy Machine Equipment","Non-Shrink Precision Grouts","High Early Strength Bedding"], benefits:["Zero shrinkage compensation","Ultra-high early and ultimate compressive strength","Dynamic vibration and impact resistance","High flowability without segregation"], applications:["Steel Anchoring for structural columns and baseplates","Heavy Machine Equipment dynamic bedding","Bridge bearing plates and precast joints","Starter bar and rebar post-fixing"], tech:"Conforms to BS EN 1504-6 and ASTM C1107 Grade C.", usage:"Mix with measured clean water. Pour or pump continuously from one side to eliminate air entrapment.", appImages:[
+    // GROUT & ANCHORING — APPLICATION IMAGE 1
+    {src:"images/Anchoring-Grouting.jpeg", alt:"Grout & Anchoring Installation"},
+    // GROUT & ANCHORING — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Hero-02.jpeg", alt:"Heavy Machinery Bedding"},
+    // GROUT & ANCHORING — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Hero-03.jpeg", alt:"Structural Steel Baseplate Anchoring"}
+  ]},
+  {id:"asphalt-emulsion", img:"images/Bitumen-Emulsion.jpeg", name:"Asphalt Emulsion", icon:"fa-road", cat:"products", desc:"High-grade cationic and anionic Asphalt Emulsions formulated for tack coats, prime coats, road sub-bases, and bituminous surface treatments.", subcategories:["Cationic Asphalt Emulsion","Anionic Asphalt Emulsion","Prime Coat & Tack Coat","Slurry Seal & Road Dressing"], benefits:["Cold application convenience without heating","Rapid breaking and setting time","Strong aggregate adhesion and binder cohesion","Environmental safety without toxic solvent fumes"], applications:["Asphalt pavement tack coating","Granular road sub-base prime coating","Road surface dressing and slurry sealing","Bituminous foundation damp-proofing"], tech:"Conforms to AASHTO M140 / M208 and ASTM D977 / D2397.", usage:"Spray or brush apply at specified rate (0.5 to 1.5 kg/m² depending on surface porosity).", appImages:[
+    // ASPHALT EMULSION — APPLICATION IMAGE 1
+    {src:"images/Bitumen-Emulsion.jpeg", alt:"Bitumen Emulsion"},
+    // ASPHALT EMULSION — APPLICATION IMAGE 2
+    {src:"images/Hot-Bitumen.jpeg", alt:"Hot Bitumen Application"},
+    // ASPHALT EMULSION — APPLICATION IMAGE 3
+    {src:"images/Tack-Coat.jpeg", alt:"Tack Coat Application"}
+  ]},
+  {id:"surface-treatments", img:"images/Surface-Treatments.jpeg", name:"Surface Treatments", icon:"fa-broom", cat:"products", desc:"Liquid silicate hardeners, dust-proofers and curing compounds designed to dramatically increase the abrasion resistance of concrete floors.", subcategories:["Liquid Silicate Floor Hardeners","Dust-Proofing Formulations","Concrete Curing Compounds","Surface Penetrating Sealers"], benefits:["Dense, dust-free surface finish","High abrasion and wear resistance","Chemical and oil penetration resistance","Easy maintenance and long-term polish"], applications:["Warehouse and distribution center floors","Industrial manufacturing plants","Commercial car parks and showrooms","Exposed architectural concrete"], tech:"Sodium & lithium silicate systems conforming to ASTM C779.", usage:"Saturate surface for 30 minutes, agitate with broom, then squeegee excess.", appImages:[
+    // SURFACE TREATMENTS — APPLICATION IMAGE 1
+    {src:"images/Surface-Treatments.jpeg", alt:"Surface Treatments"},
+    // SURFACE TREATMENTS — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Hero-04.jpeg", alt:"Hardened Concrete Slab"},
+    // SURFACE TREATMENTS — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Flooring-Systems.jpeg", alt:"Polished Industrial Surface"}
+  ]},
+  {id:"concrete-repairs", img:"images/Surface-Treatments.jpeg", name:"Concrete Repairs", icon:"fa-trowel", cat:"products", desc:"Structural polymer-modified repair mortars, patch compounds and fairing coats for restoring damaged, spalled or deteriorated concrete elements.", subcategories:["Structural Polymer Mortars","Fairing Coats & Skim Mortars","High-Build Repair Compounds","Corrosion Inhibiting Coatings"], benefits:["Exceptional bond strength to parent concrete","Low shrinkage and crack resistance","High early strength development","Chloride and carbonation resistance"], applications:["Spalled concrete columns and bridge beams","Honeycomb and void patching","Overhead and vertical structural repairs","Industrial floor re-profiling"], tech:"EN 1504-3 Class R3 / R4 compliant.", usage:"Saw-cut perimeter, remove damaged concrete to sound substrate, apply bonding agent and pack mortar.", appImages:[
+    // CONCRETE REPAIRS — APPLICATION IMAGE 1 (NEEDS IMAGE)
+    {src:"images/Surface-Treatments.jpeg", alt:"Structural Patch Repair"},
+    // CONCRETE REPAIRS — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Hero-06.jpeg", alt:"Beam Repair Application"},
+    // CONCRETE REPAIRS — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Hero-07.jpeg", alt:"Column Re-profiling"}
+  ]},
+  {id:"industrial-flooring", img:"images/Flooring-Systems.jpeg", name:"Industrial Flooring", icon:"fa-layer-group", cat:"products", desc:"Heavy-duty seamless epoxy and polyurethane flooring systems engineered for extreme mechanical loading and chemical exposure.", subcategories:["Seamless Epoxy Screeds","Self-Levelling Flooring","Polyurethane Heavy-Duty Screeds","Anti-Static & Chemical-Resistant Floors"], benefits:["Superior abrasion and impact resistance","Seamless, hygienic and dust-free","High chemical and solvent resistance","Customizable non-slip surface profiles"], applications:["Pharmaceutical and cleanroom facilities","Food and beverage processing plants","Heavy engineering workshops and hangars","Chemical storage areas"], tech:"Self-levelling epoxy system, Shore D > 80, Compressive Strength > 70 MPa.", usage:"Mechanically prepare substrate by diamond grinding or captive blasting. Prime prior to body coat.", appImages:[
+    // INDUSTRIAL FLOORING — APPLICATION IMAGE 1
+    {src:"images/Flooring-Systems.jpeg", alt:"Industrial Flooring System"},
+    // INDUSTRIAL FLOORING — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-Metro-Cash-Carry.jpeg", alt:"Commercial Flooring Application"},
+    // INDUSTRIAL FLOORING — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Hero-08.jpeg", alt:"High-Gloss Resin Floor"}
+  ]},
+  {id:"adhesives", img:"images/Adhesives.jpeg", name:"Adhesives", icon:"fa-link", cat:"products", desc:"High-strength epoxy and polymer bonding agents for structural concrete joints, stone fixing, and heavy cladding.", subcategories:["Structural Epoxy Bonding Agents","Concrete-to-Concrete Adhesives","Latex SBR Admixtures","Heavy Cladding Anchor Adhesives"], benefits:["Exceptional tensile and shear adhesion","Extended open time for large placements","Structural load-bearing capability","Moisture-tolerant formulations"], applications:["Bonding fresh concrete to hardened concrete","Structural cold joint rehabilitation","Granite and marble heavy cladding","Post-installed anchors and dowels"], tech:"Conforms to ASTM C881 Type I, II, IV & V.", usage:"Apply by brush, roller or notched trowel over sound, clean substrate.", appImages:[
+    // ADHESIVES — APPLICATION IMAGE 1
+    {src:"images/Adhesives.jpeg", alt:"Structural Adhesive Application"},
+    // ADHESIVES — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-RCG-Mall.jpeg", alt:"Tile & Cladding Bonding"},
+    // ADHESIVES — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Project-Misaq-Mall.jpeg", alt:"Commercial Adhesive Work"}
+  ]},
+  {id:"protective-coatings", img:"images/Protective-Coatings.jpeg", name:"Protective Coatings", icon:"fa-shield", cat:"products", desc:"Anti-carbonation, elastomeric and chemical-resistant protective coatings for concrete and structural steel infrastructure.", subcategories:["Anti-Carbonation Coatings","Aliphatic Polyurethane Topcoats","Epoxy Barrier Linings","Weatherproof Protective Systems"], benefits:["Resistance against UV degradation and weathering","Protection against acid rain and carbonation","Anti-corrosion protection for embedded steel","Breathable and crack-bridging properties"], applications:["External building facades and bridge piers","Industrial pipelines and storage tanks","Marine and coastal structures","Wastewater treatment plants"], tech:"High-build polyurethane and aliphatic epoxy systems.", usage:"Apply to thoroughly cleaned, primed substrate via airless spray, roller or brush.", appImages:[
+    // PROTECTIVE COATINGS — APPLICATION IMAGE 1
+    {src:"images/Protective-Coatings.jpeg", alt:"Protective Coating Application"},
+    // PROTECTIVE COATINGS — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-Chiniot-Power-Plant.jpeg", alt:"Power Plant Protective Work"},
+    // PROTECTIVE COATINGS — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Project-Liberty-Power-Plant.jpeg", alt:"Industrial Coating Application"}
+  ]},
+  {id:"sealants", img:"images/Sealants.jpeg", name:"Sealants", icon:"fa-fill-drip", cat:"products", desc:"High-performance polyurethane, polysulphide and silicone elastomeric joint sealants for movement and expansion joints.", subcategories:["Polyurethane Joint Sealants","Polysulphide Expansion Sealants","Silicone Facade Sealants","Backing Rods & Joint Accessories"], benefits:["High movement accommodation factor (±25%)","Weather and UV radiation resistance","Excellent primerless adhesion to concrete","Bubble-free curing and non-sag formula"], applications:["Building facade expansion joints","Concrete pavement and runway joints","Water retaining structure joints","Basement precast panel sealing"], tech:"ISO 11600 Class F-25LM and ASTM C920 compliant.", usage:"Insert closed-cell backing foam rod. Apply sealant maintaining 2:1 width-to-depth ratio and tool flat.", appImages:[
+    // SEALANTS — APPLICATION IMAGE 1
+    {src:"images/Sealants.jpeg", alt:"Joint Sealant Application"},
+    // SEALANTS — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Water-Stoppers.jpeg", alt:"Expansion Joint Sealing"},
+    // SEALANTS — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Project-NLC-Underpass.jpeg", alt:"Underpass Joint Sealing"}
+  ]},
+  {id:"tile-fixing", img:"images/Adhesives.jpeg", name:"Tile Fixing & Adhesives", icon:"fa-border-all", cat:"products", desc:"Polymer-modified cementitious and epoxy tile adhesives for porcelain, ceramic, granite and large-format slabs.", subcategories:["C2TE Standard Tile Adhesives","S1 Flexible Porcelain Mortars","Submerged Swimming Pool Adhesives","Non-Slip Large-Format Mortars"], benefits:["Zero vertical slip formula","High initial grab and tensile bond strength","Extended open time for precise alignment","Suitable for interior and exterior submerged areas"], applications:["Large-format porcelain floor tiles","Commercial mall walkways and lobbies","Swimming pools and water features","External building facade cladding"], tech:"Conforms to EN 12004 Class C2TE S1.", usage:"Mix with specified water ratio and comb with notched trowel. Butter tile backs for large formats.", appImages:[
+    // TILE FIXING & ADHESIVES — APPLICATION IMAGE 1
+    {src:"images/Adhesives.jpeg", alt:"Tile Adhesive Application"},
+    // TILE FIXING & ADHESIVES — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-RCG-Mall.jpeg", alt:"Mall Tile Installation"},
+    // TILE FIXING & ADHESIVES — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Project-Misaq-Mall.jpeg", alt:"Commercial Floor Tiling"}
+  ]},
+  {id:"epoxy-tile-grout", img:"images/Adhesives.jpeg", name:"Epoxy Tile Grout", icon:"fa-border-all", cat:"products", desc:"Three-component, stain-proof and chemical-resistant epoxy grout for tile joints requiring hygiene and durability.", subcategories:["RG Grade Epoxy Tile Grouts","Stain-Proof & Chemical Grouts","Hygienic Commercial Kitchen Grouts","Water-Repellent Colored Grout"], benefits:["100% stain-proof and non-porous","Chemical and acid resistant","Zero water absorption","Uniform color retention without fading"], applications:["Commercial kitchens and restaurants","Laboratories and hospitals","Swimming pools and wet rooms","High-traffic shopping mall floors"], tech:"Conforms to EN 13888 Class RG standards.", usage:"Pack firmly into joints with rubber float. Emulsify and clean surplus within 30 minutes with scotch-brite.", appImages:[
+    // EPOXY TILE GROUT — APPLICATION IMAGE 1 (NEEDS IMAGE)
+    {src:"images/Adhesives.jpeg", alt:"Epoxy Grout Application"},
+    // EPOXY TILE GROUT — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-RCG-Mall.jpeg", alt:"Joint Finishing"},
+    // EPOXY TILE GROUT — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Project-Metro-Cash-Carry.jpeg", alt:"Commercial Tile Grouting"}
+  ]},
+  {id:"repairs-retrofitting", img:"images/Surface-Treatments.jpeg", name:"Repairs & Retrofitting", icon:"fa-screwdriver-wrench", cat:"products", desc:"Advanced structural strengthening and retrofitting systems utilizing Carbon Fiber Reinforced Polymers (CFRP) and steel jacketing.", subcategories:["Carbon Fiber (CFRP) Strengthening","Steel Jacketing & Plate Bonding","Post-Tensioned Strengthening","Structural Seismic Retrofitting"], benefits:["Dramatically increases load-carrying capacity","Negligible added dead-weight to structure","Corrosion-free structural reinforcement","Fast execution with minimal structural disruption"], applications:["Seismic upgrades and building strengthening","Bridge beam and slab load upgrades","Column confinement and shear strengthening","Modifications after core drilling or load changes"], tech:"CFRP laminates and fabric tested in accordance with ACI 440.", usage:"Grit-blast concrete to open pores, apply saturant epoxy resin and adhere carbon fiber sheets under pressure.", appImages:[
+    // REPAIRS & RETROFITTING — APPLICATION IMAGE 1 (NEEDS IMAGE)
+    {src:"images/Surface-Treatments.jpeg", alt:"CFRP Structural Strengthening"},
+    // REPAIRS & RETROFITTING — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-Chiniot-Power-Plant.jpeg", alt:"Retrofit Engineering"},
+    // REPAIRS & RETROFITTING — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Project-WASA-Reservoir.jpeg", alt:"Structural Rehabilitation"}
+  ]},
+  {id:"crack-repair", img:"images/Surface-Treatments.jpeg", name:"Crack Repairing & Injection", icon:"fa-syringe", cat:"products", desc:"Ultra-low viscosity epoxy and polyurethane resins for pressure injection into structural fissures and concrete cracks.", subcategories:["Low-Viscosity Epoxy Resins","Hydrophobic Polyurethane Foams","High-Pressure Injection Ports","Structural Micro-Crack Consolidation"], benefits:["Deep penetration into micro-cracks (down to 0.1mm)","Restores monolithic structural strength","Hydrophobic polyurethane stops active water leaks","High bond strength exceeding concrete tensile capacity"], applications:["Basement and retaining wall foundation cracks","Structural slab and beam flexural cracks","Water retaining tank and reservoir leak sealing","Bridge deck fissure consolidation"], tech:"ASTM C881 Type I & IV low-viscosity resins.", usage:"Install surface ports along crack, seal crack surface with epoxy paste, and inject resin under pressure.", appImages:[
+    // CRACK REPAIRING & INJECTION — APPLICATION IMAGE 1 (NEEDS IMAGE)
+    {src:"images/Surface-Treatments.jpeg", alt:"High-Pressure Crack Injection"},
+    // CRACK REPAIRING & INJECTION — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-WASA-Reservoir.jpeg", alt:"Reservoir Crack Sealing"},
+    // CRACK REPAIRING & INJECTION — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Water-Stoppers.jpeg", alt:"Water Leak Sealing"}
+  ]},
+  {id:"bituminous-membranes", img:"images/Waterproofing.jpeg", name:"Bituminous Membranes", icon:"fa-layer-group", cat:"products", desc:"Pre-formed APP and SBS modified polymer bitumen waterproofing membranes reinforced with spunbond non-woven polyester.", subcategories:["APP Modified Torch Membranes","SBS Elastomeric Membranes","Mineral Surfaced Cap Sheets","Bituminous Primers & Accessories"], benefits:["High elongation and tensile strength","Superior puncture and tear resistance","Consistent factory-controlled thickness","Extreme resistance to hydrostatic pressure"], applications:["Flat roofs and exposed terrace decks","Subterranean basement retaining walls","Podium slabs and green roof systems","Bridge decks and civil engineering structures"], tech:"Conforms to ASTM D5147 and UEAtc standards.", usage:"Torch apply over primed concrete with 100mm side and 150mm end overlaps, fully sealing seams.", appImages:[
+    // BITUMINOUS MEMBRANES — APPLICATION IMAGE 1
+    {src:"images/Torch-Membranes.jpeg", alt:"Bituminous Torch Membrane"},
+    // BITUMINOUS MEMBRANES — APPLICATION IMAGE 2
+    {src:"images/Prime-Coat.jpeg", alt:"Bituminous Primer Coat"},
+    // BITUMINOUS MEMBRANES — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Waterproofing.jpeg", alt:"Rooftop Membrane Application"}
+  ]},
+  {id:"polyurethane-waterproofing", img:"images/Waterproofing.jpeg", name:"Polyurethane Liquid Waterproofing", icon:"fa-droplet", cat:"products", desc:"Single and two-component elastomeric liquid polyurethane waterproofing membranes forming a seamless, fully-adhered protective barrier.", subcategories:["Liquid-Applied PU Membranes","Root-Resistant Podium Barriers","Moisture Vapor Permeable Topcoats","Elastomeric Waterproofing Systems"], benefits:["100% seamless without joints or laps","High crack-bridging capability even at sub-zero temperatures","Root penetration and standing water resistance","UV-stable and moisture vapor permeable"], applications:["Exposed roof decks and balconies","Green roofs and planter boxes","Wet areas, kitchens and utility rooms","Bridge decks and pedestrian traffic areas"], tech:"Liquid polyurethane technology conforming to ETAG 005.", usage:"Apply with roller or airless spray in 2-3 coats to achieve minimum 1.5mm dry film thickness.", appImages:[
+    // POLYURETHANE LIQUID WATERPROOFING — APPLICATION IMAGE 1
+    {src:"images/Waterproofing.jpeg", alt:"Liquid Polyurethane Waterproofing"},
+    // POLYURETHANE LIQUID WATERPROOFING — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Torch-Membranes.jpeg", alt:"Liquid Applied Barrier"},
+    // POLYURETHANE LIQUID WATERPROOFING — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Water-Stoppers.jpeg", alt:"Detailing & Joint Waterproofing"}
+  ]},
+  {id:"epoxy-flooring", img:"images/Flooring-Systems.jpeg", name:"Epoxy Flooring", icon:"fa-brush", cat:"products", desc:"High-build, solvent-free epoxy floor coatings and self-levelling screeds designed for dust-proofing and aesthetic floor protection.", subcategories:["High-Build Epoxy Coatings","Solvent-Free Self-Levelling Epoxy","Decorative Quartz Epoxy","Slip-Resistant Industrial Finishes"], benefits:["High gloss or matte durable finish","Easy to clean and maintain","Good resistance to oils, greases and light chemicals","Dust-proofing for porous concrete slabs"], applications:["Automotive showrooms and workshops","Warehouse aisles and storage rooms","Commercial retail premises","Light manufacturing areas"], tech:"Solvent-free epoxy resin system, Shore D > 75.", usage:"Apply 2 coats over properly prepared and primed concrete substrate using roller or squeegee.", appImages:[
+    // EPOXY FLOORING — APPLICATION IMAGE 1
+    {src:"images/Flooring-Systems.jpeg", alt:"Epoxy Floor Coating"},
+    // EPOXY FLOORING — APPLICATION IMAGE 2 (NEEDS IMAGE)
+    {src:"images/Project-Metro-Cash-Carry.jpeg", alt:"Retail Floor Application"},
+    // EPOXY FLOORING — APPLICATION IMAGE 3 (NEEDS IMAGE)
+    {src:"images/Hero-08.jpeg", alt:"Epoxy Surface Finish"}
+  ]}
 ];
 
 /* ─── REAL PROJECTS DATA ─── */
@@ -2214,6 +3013,8 @@ const allClients = [
   "Noon Pakistan","Chenab Group","Faisal Movers","Al-Fatah Group"
 ];
 
+/* ─── HERO SLIDES CONFIG DUPLICATE REMOVED ─── */
+
 const salesMessages = [
   'TRUSTED BY INDUSTRY LEADERS','1000+ COMPLETED PROJECTS','1000+ HAPPY CLIENTS',
   'PREMIUM WATERPROOFING SOLUTIONS','ENGINEERING EXCELLENCE','HOUSE OF CONSTRUCTION SOLUTIONS',
@@ -2264,11 +3065,11 @@ async function filterExisting(items, imgKey="img"){
   const fill=document.getElementById('preloaderFill');
   const pctLabel=document.getElementById('preloaderPct');
   const interval=setInterval(()=>{
-    pct+=Math.random()*15+3;
+    pct+=Math.random()*20+5;
     if(pct>=100){pct=100;clearInterval(interval);finishLoad();}
     if(fill) fill.style.width=pct+'%';
     if(pctLabel) pctLabel.textContent=Math.floor(pct)+'%';
-  },180);
+  },120);
   function finishLoad(){
     setTimeout(()=>{
       const pre=document.getElementById('preloader');
@@ -2277,19 +3078,22 @@ async function filterExisting(items, imgKey="img"){
       setTimeout(()=>{
         document.getElementById('heroEyebrow')?.classList.add('revealed');
         setTimeout(()=>{
-          splitTextReveal(document.getElementById('heroTitle'), heroSlides[0].title);
-          const sub=document.getElementById('heroSub');
-          if(sub){sub.textContent=heroSlides[0].sub; sub.classList.add('revealed');}
+          if(typeof heroSlides !== 'undefined' && heroSlides.length){
+            splitTextReveal(document.getElementById('heroTitle'), heroSlides[0].title);
+            const sub=document.getElementById('heroSub');
+            if(sub){sub.textContent=heroSlides[0].sub; sub.classList.add('revealed');}
+          }
           document.getElementById('heroBtns')?.classList.add('revealed');
           document.getElementById('heroMeta')?.classList.add('revealed');
           document.getElementById('heroStrengths')?.classList.add('revealed');
         },150);
       },200);
-      AOS.refresh();
-      initCountUps();
+      if(typeof AOS !== 'undefined') AOS.refresh();
+      if(typeof initCountUps === 'function') initCountUps();
     },350);
   }
-  window.addEventListener('load',()=>{pct=Math.max(pct,92);});
+  window.addEventListener('load',()=>{pct=Math.max(pct,95);});
+  setTimeout(finishLoad, 3500);
 })();
 
 /* ============================================================
@@ -2354,14 +3158,37 @@ const viewMap = {
   'contact':'contact-view'
 };
 
-function showView(viewKey, animate=true){
-  if(animate && pto){
-    pto.classList.add('active');
-    setTimeout(()=>doSwitch(viewKey), 250);
-    setTimeout(()=>pto.classList.remove('active'), 650);
-  } else {
+let isTransitioning = false;
+let transitionFallbackTimer = null;
+
+function showView(viewKey, animate=false){
+  if(!animate || !pto){
     doSwitch(viewKey);
+    return;
   }
+  if(isTransitioning) return;
+  isTransitioning = true;
+  if(transitionFallbackTimer) clearTimeout(transitionFallbackTimer);
+
+  pto.classList.add('active');
+
+  // Hard safety fallback timer at 2.8s
+  transitionFallbackTimer = setTimeout(()=>{
+    pto.classList.remove('active');
+    isTransitioning = false;
+  }, 2800);
+
+  // Switch view behind the 3D cube at midpoint
+  setTimeout(()=>{
+    doSwitch(viewKey);
+  }, 750);
+
+  // Finish transition and dismiss cube scene
+  setTimeout(()=>{
+    pto.classList.remove('active');
+    isTransitioning = false;
+    if(transitionFallbackTimer) clearTimeout(transitionFallbackTimer);
+  }, 1900);
 }
 
 function doSwitch(viewKey){
@@ -2519,16 +3346,19 @@ function initParticles(){
 }
 initParticles();
 
-document.getElementById('home').addEventListener('mousemove',(e)=>{
-  const x=(e.clientX/window.innerWidth-0.5)*20;
-  const y=(e.clientY/window.innerHeight-0.5)*20;
-  const beam=document.querySelector('.hero-light-beam');
-  const orb1=document.querySelector('.hero-orb-1');
-  const orb2=document.querySelector('.hero-orb-2');
-  if(beam) beam.style.transform=`translate(${x}px,${y*0.5}px)`;
-  if(orb1) orb1.style.transform=`translate(${x*0.4}px,${y*0.4}px)`;
-  if(orb2) orb2.style.transform=`translate(${-x*0.3}px,${-y*0.3}px)`;
-},{passive:true});
+const homeSection = document.getElementById('home');
+if(homeSection){
+  homeSection.addEventListener('mousemove',(e)=>{
+    const x=(e.clientX/window.innerWidth-0.5)*20;
+    const y=(e.clientY/window.innerHeight-0.5)*20;
+    const beam=document.querySelector('.hero-light-beam');
+    const orb1=document.querySelector('.hero-orb-1');
+    const orb2=document.querySelector('.hero-orb-2');
+    if(beam) beam.style.transform=`translate(${x}px,${y*0.5}px)`;
+    if(orb1) orb1.style.transform=`translate(${x*0.4}px,${y*0.4}px)`;
+    if(orb2) orb2.style.transform=`translate(${-x*0.3}px,${-y*0.3}px)`;
+  },{passive:true});
+}
 
 /* ============================================================
    COUNTUP
@@ -2564,20 +3394,152 @@ document.querySelectorAll('.mvv-tab').forEach(tab=>{
 });
 
 /* ============================================================
-   PRODUCTS & TECHNICAL APPLICATIONS SHOWCASE
+   ULTRA-STYLE PRODUCTS DROPDOWN & CATEGORY SELECTION
    ============================================================ */
-function renderProducts(catFilter='all'){
-  const grid=document.getElementById('productsGrid');
-  let filtered = productsData;
-  if(catFilter === 'products') filtered = productsData.filter(p=>p.cat==='products');
-  else if(catFilter === 'services') filtered = productsData.filter(p=>p.cat==='services');
+let currentProductViewMode = 'list';
 
-  grid.innerHTML=filtered.map((s,i)=>`
+function setProductViewMode(mode='list'){
+  currentProductViewMode = mode;
+  const viewCard = document.getElementById('productSelectedView');
+  const grid = document.getElementById('productsGrid');
+  const btnList = document.getElementById('btnViewList');
+  const btnGrid = document.getElementById('btnViewGrid');
+
+  if(mode === 'grid'){
+    if(viewCard) viewCard.style.display = 'none';
+    if(grid) {
+      grid.style.display = 'grid';
+      renderProductsGrid();
+    }
+    if(btnList) btnList.classList.remove('active');
+    if(btnGrid) btnGrid.classList.add('active');
+  } else {
+    if(grid) grid.style.display = 'none';
+    if(viewCard) {
+      viewCard.style.display = 'block';
+    }
+    if(btnList) btnList.classList.add('active');
+    if(btnGrid) btnGrid.classList.remove('active');
+  }
+  if(typeof AOS !== 'undefined') AOS.refresh();
+}
+
+function selectCategory(catId='concrete-admixtures'){
+  const selected = catId || 'concrete-admixtures';
+  
+  // Highlight active row in navbar dropdown
+  document.querySelectorAll('.nav-cat-row').forEach(row => {
+    row.classList.toggle('active-cat-row', row.getAttribute('data-cat') === selected);
+  });
+
+  // Update sidebar active states
+  document.querySelectorAll('.pcat-nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-pcat') === selected);
+  });
+  
+  // Update mobile select
+  const mob = document.getElementById('productsMobileSelect');
+  if(mob && mob.value !== selected) mob.value = selected;
+
+  const viewCard = document.getElementById('productSelectedView');
+  const grid = document.getElementById('productsGrid');
+
+  if(selected === 'all'){
+    setProductViewMode('grid');
+    return;
+  }
+
+  const p = productsData.find(item => item.id === selected) || productsData[0];
+  if(!p) return;
+
+  if(grid) grid.style.display = 'none';
+  if(viewCard) {
+    viewCard.style.display = 'block';
+    
+    // Subcategories HTML
+    const subcatsHTML = (p.subcategories && p.subcategories.length) ? `
+      <div class="product-subcats-box">
+        <div class="product-subcats-title"><i class="fa-solid fa-list-check"></i> SPECIALIZED SYSTEMS &amp; SUBCATEGORIES</div>
+        <div class="product-subcats-grid">
+          ${p.subcategories.map(s => `<span class="subcat-pill"><i class="fa-solid fa-circle-check"></i> ${s}</span>`).join('')}
+        </div>
+      </div>
+    ` : '';
+
+    // Application Photos 3-Slot Grid
+    const appImagesHTML = (p.appImages && p.appImages.length) ? `
+      <div class="product-app-showcase">
+        <div class="product-app-title">
+          <span><i class="fa-solid fa-camera-retro me-2" style="color:var(--gold);"></i> Real-World Project Applications</span>
+          <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--gold-deep);font-weight:600;">3 Application Slots</span>
+        </div>
+        <div class="product-app-grid">
+          ${p.appImages.map(img => `
+            <div class="app-photo-card" onclick="openProductModal('${p.id}')">
+              <img src="${img.src}" alt="${img.alt}" loading="lazy" onerror="this.src='images/logo.jpeg'">
+              <div class="app-photo-label">${img.alt}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    ` : '';
+
+    viewCard.innerHTML = `
+      <div class="product-selected-card">
+        <div class="product-selected-header">
+          <div class="product-selected-img-wrap">
+            <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='images/logo.jpeg'">
+          </div>
+          <div class="product-selected-info">
+            <div class="eyebrow"><i class="fa-solid ${p.icon} me-1"></i> CATEGORY SPECIFICATION</div>
+            <h3><i class="fa-solid ${p.icon}"></i> ${p.name}</h3>
+            <p class="desc">${p.desc}</p>
+            <div class="product-action-row">
+              <button type="button" class="btn-luxury btn-gold btn-sm-luxury" onclick="openProductModal('${p.id}')">
+                <i class="fa-solid fa-file-lines me-1"></i> View Full Technical Specs
+              </button>
+              <button type="button" class="btn-luxury btn-outline-luxury btn-sm-luxury" data-bs-toggle="modal" data-bs-target="#contactChoiceModal">
+                <i class="fa-solid fa-phone me-1"></i> Request Quote / Inquire
+              </button>
+            </div>
+          </div>
+        </div>
+
+        ${subcatsHTML}
+
+        <div class="product-specs-grid">
+          <div class="product-specs-card">
+            <h5><i class="fa-solid fa-circle-check me-1"></i> Key Engineering Benefits</h5>
+            <ul>
+              ${(p.benefits || []).map(b => `<li><i class="fa-solid fa-check"></i> <span>${b}</span></li>`).join('')}
+            </ul>
+          </div>
+          <div class="product-specs-card">
+            <h5><i class="fa-solid fa-screwdriver-wrench me-1"></i> Applications &amp; Standards</h5>
+            <ul>
+              ${(p.applications || []).map(a => `<li><i class="fa-solid fa-arrow-right"></i> <span>${a}</span></li>`).join('')}
+              ${p.tech ? `<li class="mt-2" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--navy);font-weight:600;"><i class="fa-solid fa-certificate"></i> Standard: ${p.tech}</li>` : ''}
+            </ul>
+          </div>
+        </div>
+
+        ${appImagesHTML}
+      </div>
+    `;
+  }
+
+  setProductViewMode('list');
+}
+
+function renderProductsGrid(){
+  const grid = document.getElementById('productsGrid');
+  if(!grid) return;
+  grid.innerHTML = productsData.map(s => `
     <div class="product-item-card" data-id="${s.id}">
       <div class="ripple-container"></div>
-      ${s.img?`<img src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';">`:``}
+      ${s.img ? `<img src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.src='images/logo.jpeg'">` : ''}
       <div class="product-item-body">
-        <div class="ptag-sub">${s.cat==='products'?'Product / Application':'Technical Service'}</div>
+        <div class="ptag-sub">Product / Application</div>
         <div class="pv-icon"><i class="fa-solid ${s.icon}"></i></div>
         <h4>${s.name}</h4>
         <div class="desc">${s.desc}</div>
@@ -2585,41 +3547,98 @@ function renderProducts(catFilter='all'){
     </div>
   `).join('');
 
-  if(typeof VanillaTilt!=='undefined'){
+  if(typeof VanillaTilt !== 'undefined'){
     VanillaTilt.init(grid.querySelectorAll('.product-item-card'),{
-      max:10,speed:400,glare:true,'max-glare':0.12,perspective:900,scale:1.02,gyroscope:false
+      max:6,speed:400,glare:true,"max-glare":0.15,perspective:900,scale:1.02,gyroscope:false
     });
   }
 
-  grid.querySelectorAll('.product-item-card').forEach(card=>{
-    card.addEventListener('click',(e)=>{
-      const rc=card.getBoundingClientRect();
-      const ripple=document.createElement('div'); ripple.className='ripple';
-      const size=Math.max(rc.width,rc.height)*2;
-      ripple.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rc.left-size/2}px;top:${e.clientY-rc.top-size/2}px;`;
+  grid.querySelectorAll('.product-item-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      const rc = card.getBoundingClientRect();
+      const ripple = document.createElement('div'); ripple.className = 'ripple';
+      const size = Math.max(rc.width, rc.height) * 2;
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rc.left - size/2}px;top:${e.clientY - rc.top - size/2}px;`;
       card.querySelector('.ripple-container').appendChild(ripple);
-      setTimeout(()=>ripple.remove(),950);
+      setTimeout(() => ripple.remove(), 950);
       openProductModal(card.getAttribute('data-id'));
     });
   });
 
-  AOS.refresh();
+  if(typeof AOS !== 'undefined') AOS.refresh();
 }
 
-/* Category Filter Tabs for Products */
-document.querySelectorAll('.products-cat-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    document.querySelectorAll('.products-cat-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    renderProducts(tab.getAttribute('data-pcat'));
+function renderProducts(cat='concrete-admixtures'){
+  selectCategory(cat);
+}
+
+// View Switcher Button Bindings
+const btnViewList = document.getElementById('btnViewList');
+const btnViewGrid = document.getElementById('btnViewGrid');
+if(btnViewList) btnViewList.addEventListener('click', () => setProductViewMode('list'));
+if(btnViewGrid) btnViewGrid.addEventListener('click', () => setProductViewMode('grid'));
+
+// Navbar Dropdown Event Listeners
+const navProdItem = document.getElementById('navProductsDropdownItem');
+const navProdTrigger = document.getElementById('navProductsTrigger');
+
+if (navProdTrigger && navProdItem) {
+  navProdTrigger.addEventListener('click', (e) => {
+    if (window.innerWidth <= 991) {
+      e.preventDefault();
+      navProdItem.classList.toggle('dropdown-open');
+    } else {
+      e.preventDefault();
+      if (!navProdItem.classList.contains('dropdown-open')) {
+        navProdItem.classList.add('dropdown-open');
+      } else {
+        navProdItem.classList.remove('dropdown-open');
+      }
+      showView('products', true);
+    }
   });
+}
+
+// Category Row Click Handlers inside Navbar Dropdown
+document.querySelectorAll('.nav-cat-row').forEach(row => {
+  row.addEventListener('click', (e) => {
+    e.preventDefault();
+    const cat = row.getAttribute('data-cat');
+    if (navProdItem) navProdItem.classList.remove('dropdown-open');
+    
+    // Close mobile menu if open
+    const navLinks = document.getElementById('navLinks');
+    const navOverlay = document.getElementById('navOverlay');
+    if (navLinks) navLinks.classList.remove('open');
+    if (navOverlay) navOverlay.classList.remove('show');
+
+    // Switch to products view and select category
+    showView('products', true);
+    selectCategory(cat);
+
+    // Smooth scroll down to products content
+    setTimeout(() => {
+      const prodSec = document.getElementById('products');
+      if (prodSec) {
+        const top = prodSec.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 150);
+  });
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (navProdItem && !navProdItem.contains(e.target)) {
+    navProdItem.classList.remove('dropdown-open');
+  }
 });
 
 function openProductModal(id){
   const p = productsData.find(item=>item.id===id);
   if(!p) return;
   document.getElementById('pModalImg').src=p.img||'';
-  document.getElementById('pModalEyebrow').textContent=p.cat==='products'?'PRODUCT SPECIFICATION':'TECHNICAL SERVICE DETAILS';
+  document.getElementById('pModalEyebrow').textContent='PRODUCT SPECIFICATION';
   document.getElementById('pModalTitle').textContent=p.name;
   document.getElementById('pModalDesc').textContent=p.desc;
   document.getElementById('pModalBenefits').innerHTML=(p.benefits||[]).map(b=>`<li>${b}</li>`).join('');
@@ -2627,11 +3646,23 @@ function openProductModal(id){
   document.getElementById('pModalTech').textContent=p.tech||'';
   document.getElementById('pModalUsage').textContent=p.usage||'';
 
-  // Selected Application Project Imagery
-  document.getElementById('pModalProjImg').src=p.projectImg||'images/Project-Chiniot-Power-Plant.jpeg';
-  document.getElementById('pModalProjImg2').src='images/Project-WASA-Reservoir.jpeg';
+  const appImgContainer = document.getElementById('pModalAppImages');
+  if(appImgContainer && p.appImages && p.appImages.length) {
+    appImgContainer.innerHTML = p.appImages.map(img => `
+      <div class="col-12 col-md-6 col-lg-4 mb-3">
+        <div style="height:180px;border-radius:14px;overflow:hidden;background:var(--ivory);border:1.5px solid var(--border-gold);box-shadow:var(--shadow-sm);">
+          <img src="${img.src}" alt="${img.alt}" class="detail-modal-project-img" style="width:100%;height:100%;object-fit:cover;" onerror="this.closest('.col-12').style.display='none'">
+        </div>
+      </div>
+    `).join('');
+  } else if (appImgContainer) {
+    appImgContainer.innerHTML = '';
+  }
 
-  new bootstrap.Modal(document.getElementById('productDetailModal')).show();
+  const modalEl = document.getElementById('productDetailModal');
+  if(modalEl && typeof bootstrap !== 'undefined'){
+    new bootstrap.Modal(modalEl).show();
+  }
 }
 
 /* ============================================================
@@ -2685,21 +3716,19 @@ function renderProjectsMarquee(){
 }
 
 function openProjectModal(idx){
-  const p=_validProjects[idx]||projects[idx];
+  const p = _validProjects[idx];
   if(!p) return;
   document.getElementById('projModalImg').src=p.img||'';
-  document.getElementById('projModalEyebrow').textContent=p.tag;
-  document.getElementById('projModalTitle').textContent=p.name;
-  document.getElementById('projModalDesc').textContent=p.desc||'';
-  document.getElementById('projModalScope').innerHTML=`
-    <li>Scope: ${p.scope||'Full construction chemical supply'}</li>
-    <li>Status: ${p.completion||'Completed'}</li>
-  `;
-  document.getElementById('projModalChallenges').innerHTML=`
-    <li>${p.challenges||'Site-specific engineering challenges addressed'}</li>
-  `;
-  document.getElementById('projModalSolution').textContent=p.solution||'';
-  new bootstrap.Modal(document.getElementById('projectModal')).show();
+  document.getElementById('projModalTag').textContent=p.tag||'';
+  document.getElementById('projModalTitle').textContent=p.name||'';
+  document.getElementById('projModalLoc').textContent=p.loc||'';
+  document.getElementById('projModalDate').textContent=p.date||'';
+  document.getElementById('projModalScope').textContent=p.scope||'';
+  document.getElementById('projModalProducts').innerHTML=(p.products||[]).map(x=>`<span class="badge bg-gold me-1 mb-1">${x}</span>`).join('');
+  const modalEl = document.getElementById('projectDetailModal');
+  if(modalEl && typeof bootstrap !== 'undefined'){
+    new bootstrap.Modal(modalEl).show();
+  }
 }
 
 /* ─── CLIENT LOGOS: SCAN 1 TO 100 ACROSS 4 MARQUEE ROWS ─── */
@@ -2712,6 +3741,7 @@ async function renderClientLogos(){
   // Asynchronously validate logos fast
   const valid=await filterExisting(candidates);
   const grid=document.getElementById('clientLogosGrid');
+  if(!grid) return;
   if(!valid.length){
     // Fallback if no images found: generate 40 standard logos
     for(let i=1;i<=40;i++) valid.push({img:`images/logo-${i}.jpeg`,name:`Client Logo ${i}`});
@@ -2791,9 +3821,6 @@ async function renderCertificates(){
        data-aos="fade-up"
        data-aos-delay="${(i%4)*60}">
       <img src="${c.img}" alt="${c.name}" class="cert-glass-img" loading="lazy" onerror="this.parentElement.style.display='none';">
-      <div class="cert-badge-corner">
-        <i class="fa-solid fa-certificate"></i>
-      </div>
       <div class="cert-overlay">
         <div class="cert-overlay-content">
           <span class="cert-overlay-text">View Full Certificate</span>
@@ -2805,15 +3832,21 @@ async function renderCertificates(){
     </a>
   `).join('');
 
-  AOS.refresh();
-  GLightbox({
-    selector:'.glightbox',
-    openEffect:'zoom',
-    closeEffect:'zoom',
-    slideEffect:'slide',
-    loop:true,
-    touchNavigation:true
-  });
+  if(typeof AOS !== 'undefined') AOS.refresh();
+  if(typeof GLightbox !== 'undefined'){
+    try {
+      GLightbox({
+        selector:'.glightbox',
+        openEffect:'zoom',
+        closeEffect:'zoom',
+        slideEffect:'slide',
+        loop:true,
+        touchNavigation:true
+      });
+    } catch(err){
+      console.warn('GLightbox init notice:', err);
+    }
+  }
 }
 
 /* ============================================================
@@ -2856,16 +3889,18 @@ function calcGrout(){
   let v6=true;
   if(D<=0||D>5){setErr('grout-density','Enter a realistic density (1.60–2.10 kg/L).');v6=false;}else setErr('grout-density','');
   if(!(v1&&v2&&v3&&v4&&v5&&v6)){
-    document.getElementById('grout-kg').innerHTML='—<span class="unit">kg</span>';
     document.getElementById('grout-l').innerHTML='—<span class="unit">L</span>';
+    document.getElementById('grout-kg').innerHTML='—<span class="unit">kg</span>';
     return;
   }
-  const Lm=L/1000,Wm=W/1000,Tm=T/1000,Jm=J/1000;
-  const volumePerSqM=((Lm+Wm)/(Lm*Wm))*Jm*Tm*1000*1.07;
-  const totalLiters=volumePerSqM*A;
-  const totalKg=totalLiters*D;
-  document.getElementById('grout-kg').innerHTML=totalKg.toFixed(2)+'<span class="unit">kg</span>';
+  const D22 = (L + (W * T * J * D));
+  const D24 = (L * W);
+  const F23 = D22 / D24;
+  const totalKg = F23 * A;
+  const totalLiters = totalKg / D;
+
   document.getElementById('grout-l').innerHTML=totalLiters.toFixed(2)+'<span class="unit">L</span>';
+  document.getElementById('grout-kg').innerHTML=totalKg.toFixed(2)+'<span class="unit">kg</span>';
 }
 ['grout-length','grout-width','grout-thickness','grout-joint','grout-area','grout-density'].forEach(id=>{
   const el=document.getElementById(id);
@@ -2956,7 +3991,7 @@ function getReportData(calcType){
   const r={
     grout:{title:'Tile Grout Calculation Report',
       inputs:[['Tile Length',document.getElementById('grout-length').value+' mm'],['Tile Width',document.getElementById('grout-width').value+' mm'],['Tile Thickness',document.getElementById('grout-thickness').value+' mm'],['Joint Width',document.getElementById('grout-joint').value+' mm'],['Total Area',document.getElementById('grout-area').value+' m²'],['Grout Density',(document.getElementById('grout-density').value||'2.00')+' kg/L']],
-      results:[['Grout Required (Weight)',document.getElementById('grout-kg').textContent],['Grout Required (Volume)',document.getElementById('grout-l').textContent]]},
+      results:[['Grout Required (Volume)',document.getElementById('grout-l').textContent],['Grout Required (Weight)',document.getElementById('grout-kg').textContent]]},
     concrete:{title:'Concrete Calculation Report',
       inputs:[['Length',document.getElementById('con-length').value+' m'],['Width',document.getElementById('con-width').value+' m'],['Thickness',document.getElementById('con-thickness').value+' mm'],['Mix Ratio',document.getElementById('con-ratio').value]],
       results:[['Wet Volume',document.getElementById('con-vol').textContent],['Cement Required',document.getElementById('con-cement').textContent],['Sand Required',document.getElementById('con-sand').textContent],['Aggregate Required',document.getElementById('con-agg').textContent]]},
@@ -3091,20 +4126,28 @@ function getFormData(){
   if(!name||!phone||!message){alert('Please fill in your name, phone, and message.');return null;}
   return{name,phone,email,message};
 }
-document.getElementById('contactForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  const data=getFormData();if(!data)return;
-  const text=`Hello Safe Solutions,%0A%0AName: ${encodeURIComponent(data.name)}%0APhone: ${encodeURIComponent(data.phone)}%0AEmail: ${encodeURIComponent(data.email||'N/A')}%0A%0AMessage: ${encodeURIComponent(data.message)}`;
-  window.open(`https://wa.me/${COMPANY.phoneClean}?text=${text}`,'_blank');
-});
-document.getElementById('cf-email-btn').addEventListener('click',function(){
-  const data=getFormData();if(!data)return;
-  const sub=encodeURIComponent(`New Inquiry — ${data.name}`);
-  const body=encodeURIComponent(`Hello Safe Solutions,\n\nName: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email||'N/A'}\n\nMessage:\n${data.message}`);
-  window.location.href=`mailto:${COMPANY.email}?subject=${sub}&body=${body}`;
-});
+const cfForm = document.getElementById('contactForm');
+if(cfForm){
+  cfForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    const data=getFormData();if(!data)return;
+    const text=`Hello Safe Solutions,%0A%0AName: ${encodeURIComponent(data.name)}%0APhone: ${encodeURIComponent(data.phone)}%0AEmail: ${encodeURIComponent(data.email||'N/A')}%0A%0AMessage: ${encodeURIComponent(data.message)}`;
+    window.open(`https://wa.me/${COMPANY.phoneClean}?text=${text}`,'_blank');
+  });
+}
 
-document.getElementById('yearNow').textContent=new Date().getFullYear();
+const cfEmailBtn = document.getElementById('cf-email-btn');
+if(cfEmailBtn){
+  cfEmailBtn.addEventListener('click',function(){
+    const data=getFormData();if(!data)return;
+    const sub=encodeURIComponent(`New Inquiry — ${data.name}`);
+    const body=encodeURIComponent(`Hello Safe Solutions,\n\nName: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email||'N/A'}\n\nMessage:\n${data.message}`);
+    window.location.href=`mailto:${COMPANY.email}?subject=${sub}&body=${body}`;
+  });
+}
+
+const yrEl = document.getElementById('yearNow');
+if(yrEl) yrEl.textContent=new Date().getFullYear();
 
 /* ============================================================
    SMOOTH SCROLL
@@ -3137,7 +4180,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await Promise.all([
     initHero(),
-    renderProducts('all'),
+    renderProducts('concrete-admixtures'),
     initProjects(),
     renderCertificates(),
     renderClientLogos()
