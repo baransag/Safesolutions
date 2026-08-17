@@ -322,7 +322,7 @@ img{max-width:100%;display:block;}
    NAVBAR — Premium Glassmorphism & Glass Buttons
    ============================================================ */
 #mainNav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
+  position:fixed;top:0;left:0;right:0;z-index:1100;
   padding:20px 0;
   transition:padding 0.5s cubic-bezier(0.22,1,0.36,1),
     background 0.5s cubic-bezier(0.22,1,0.36,1),
@@ -462,48 +462,64 @@ img{max-width:100%;display:block;}
 
 @media(max-width:991px){
   .nav-links{
-    position:fixed;top:0;right:-100%;width:80%;max-width:340px;
-    height:100vh;background:var(--white);
-    flex-direction:column;justify-content:center;gap:16px;padding:36px 24px;
-    box-shadow:-10px 0 60px rgba(0,0,0,0.15);
-    transition:right 0.55s cubic-bezier(0.22,1,0.36,1);
-    z-index:1001;border-left:1px solid var(--border-gold);
-  }
-  .nav-links a{
-    width:100%;
-    padding:12px 20px;
-    font-size:0.95rem;
-    background:rgba(18,11,46,0.04);
-    border-color:rgba(226,58,86,0.15);
+    position:fixed;top:0;right:-100%;width:84%;max-width:340px;
+    height:100vh;height:100dvh;background:#ffffff;
+    flex-direction:column;justify-content:flex-start;align-items:stretch;
+    gap:10px;padding:76px 20px 30px;
+    box-shadow:-10px 0 50px rgba(0,0,0,0.22);
+    transition:right 0.4s cubic-bezier(0.22,1,0.36,1);
+    z-index:1200;border-left:1.5px solid var(--border-gold);
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
   .nav-links.open{right:0;}
-  .nav-links.open li{animation:slideInNavItem 0.5s cubic-bezier(0.22,1,0.36,1) forwards;opacity:0;width:100%;}
-  .nav-links.open li:nth-child(1){animation-delay:0.05s;}
-  .nav-links.open li:nth-child(2){animation-delay:0.10s;}
-  .nav-links.open li:nth-child(3){animation-delay:0.15s;}
-  .nav-links.open li:nth-child(4){animation-delay:0.20s;}
-  .nav-links.open li:nth-child(5){animation-delay:0.25s;}
-  .nav-links.open li:nth-child(6){animation-delay:0.30s;}
-  .nav-links.open li:nth-child(7){animation-delay:0.35s;}
-  @keyframes slideInNavItem{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+  .nav-links li{width:100%;list-style:none;}
+  .nav-links a{
+    width:100%;
+    padding:12px 18px;
+    font-size:0.95rem;
+    font-weight:600;
+    background:rgba(18,11,46,0.04);
+    border:1px solid rgba(226,58,86,0.15);
+    color:var(--navy)!important;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-links a:hover{
+    background:var(--ivory);
+    color:var(--gold-deep)!important;
+    border-color:var(--gold);
+  }
+  .nav-links a.active-nav{
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep))!important;
+    color:var(--white)!important;
+    border-color:transparent!important;
+    box-shadow:0 6px 20px -4px rgba(226,58,86,0.55)!important;
+  }
   .nav-toggle{display:flex;}
-  #mainNav:not(.scrolled) .nav-links a{color:var(--text-soft);background:rgba(18,11,46,0.04);}
+  #mainNav:not(.scrolled) .nav-links a{color:var(--navy)!important;background:rgba(18,11,46,0.04);}
+  #mainNav:not(.scrolled) .nav-links a.active-nav{color:var(--white)!important;background:linear-gradient(135deg,var(--gold),var(--gold-deep))!important;}
   .nav-cta .btn-luxury span{display:none;}
   .nav-cta .btn-luxury{padding:12px 15px;}
 }
 .nav-overlay{
-  position:fixed;inset:0;background:rgba(18,11,46,0.55);
-  z-index:1000;opacity:0;visibility:hidden;
-  transition:all 0.4s ease;backdrop-filter:blur(4px);
+  position:fixed;inset:0;background:rgba(18,11,46,0.60);
+  z-index:1050;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 0.35s ease,visibility 0.35s ease;backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
 }
-.nav-overlay.show{opacity:1;visibility:visible;}
+.nav-overlay.show{opacity:1;visibility:visible;pointer-events:auto;}
 .nav-close{
-  display:none;position:absolute;top:24px;right:24px;
-  font-size:1.4rem;color:var(--navy);cursor:pointer;
-  transition:transform 0.3s ease,color 0.3s ease;
+  display:none;position:absolute;top:20px;right:20px;
+  width:40px;height:40px;border-radius:12px;
+  background:var(--ivory);border:1px solid var(--border-gold);
+  align-items:center;justify-content:center;
+  font-size:1.2rem;color:var(--navy);cursor:pointer;
+  transition:all 0.25s ease;z-index:10;
 }
-.nav-close:hover{transform:rotate(90deg);color:var(--gold-deep);}
-@media(max-width:991px){.nav-close{display:block;}}
+.nav-close:hover{background:var(--gold);color:var(--white);transform:rotate(90deg);}
+@media(max-width:991px){.nav-close{display:flex;}}
 
 /* ============================================================
    HERO — Apple / Tesla Grade Cinematic
@@ -1865,6 +1881,9 @@ html.lenis{height:auto;}
   </div>
 </div>
 
+<!-- NAV OVERLAY -->
+<div class="nav-overlay" id="navOverlay"></div>
+
 <!-- NAVBAR -->
 <nav id="mainNav">
   <div class="nav-inner">
@@ -2009,7 +2028,6 @@ html.lenis{height:auto;}
     </div>
   </div>
 </nav>
-<div class="nav-overlay" id="navOverlay"></div>
 
 <!-- HOME VIEW -->
 <div id="home-view" class="spa-view view-active">
@@ -3233,26 +3251,45 @@ const navToggle=document.getElementById('navToggle');
 const navLinks=document.getElementById('navLinks');
 const navOverlay=document.getElementById('navOverlay');
 const navClose=document.getElementById('navClose');
-function openNav(){navLinks.classList.add('open');navOverlay.classList.add('show');}
-function closeNav(){navLinks.classList.remove('open');navOverlay.classList.remove('show');}
-navToggle.addEventListener('click',openNav);
-navClose.addEventListener('click',closeNav);
-navOverlay.addEventListener('click',closeNav);
 
-document.querySelectorAll('.nav-link-item').forEach(a=>{
+function openNav(){
+  if(navLinks) navLinks.classList.add('open');
+  if(navOverlay) navOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNav(){
+  if(navLinks) navLinks.classList.remove('open');
+  if(navOverlay) navOverlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+if(navToggle) navToggle.addEventListener('click',openNav);
+if(navClose) navClose.addEventListener('click',closeNav);
+if(navOverlay) navOverlay.addEventListener('click',closeNav);
+
+// Universal SPA Link Handling for Navigation & in-page anchors
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',function(e){
-    e.preventDefault();
-    closeNav();
-    const viewKey = this.getAttribute('href').replace('#','');
-    history.pushState(null,null,'#'+viewKey);
-    showView(viewKey, true);
+    const rawHref = this.getAttribute('href') || '';
+    if (!rawHref.startsWith('#')) return;
+    const viewKey = rawHref.replace('#','');
+    if (viewMap[viewKey]) {
+      e.preventDefault();
+      closeNav();
+      history.pushState(null,null,'#'+viewKey);
+      showView(viewKey, true);
+    }
   });
 });
 
 window.addEventListener('popstate', handleHash);
+window.addEventListener('hashchange', handleHash);
+if(location.hash){ handleHash(); }
 
 document.querySelector('.nav-brand').addEventListener('click',function(e){
   e.preventDefault();
+  closeNav();
   history.pushState(null,null,'#home');
   showView('home', true);
 });
@@ -3583,18 +3620,14 @@ const navProdItem = document.getElementById('navProductsDropdownItem');
 const navProdTrigger = document.getElementById('navProductsTrigger');
 
 if (navProdTrigger && navProdItem) {
-  navProdTrigger.addEventListener('click', (e) => {
-    if (window.innerWidth <= 991) {
-      e.preventDefault();
-      navProdItem.classList.toggle('dropdown-open');
-    } else {
-      e.preventDefault();
-      if (!navProdItem.classList.contains('dropdown-open')) {
-        navProdItem.classList.add('dropdown-open');
-      } else {
-        navProdItem.classList.remove('dropdown-open');
-      }
-      showView('products', true);
+  navProdTrigger.addEventListener('mouseenter', () => {
+    if (window.innerWidth > 991) {
+      navProdItem.classList.add('dropdown-open');
+    }
+  });
+  navProdItem.addEventListener('mouseleave', () => {
+    if (window.innerWidth > 991) {
+      navProdItem.classList.remove('dropdown-open');
     }
   });
 }
@@ -3607,12 +3640,10 @@ document.querySelectorAll('.nav-cat-row').forEach(row => {
     if (navProdItem) navProdItem.classList.remove('dropdown-open');
     
     // Close mobile menu if open
-    const navLinks = document.getElementById('navLinks');
-    const navOverlay = document.getElementById('navOverlay');
-    if (navLinks) navLinks.classList.remove('open');
-    if (navOverlay) navOverlay.classList.remove('show');
+    closeNav();
 
     // Switch to products view and select category
+    history.pushState(null, null, '#products');
     showView('products', true);
     selectCategory(cat);
 
@@ -3623,7 +3654,7 @@ document.querySelectorAll('.nav-cat-row').forEach(row => {
         const top = prodSec.getBoundingClientRect().top + window.pageYOffset - 90;
         window.scrollTo({ top, behavior: 'smooth' });
       }
-    }, 150);
+    }, 200);
   });
 });
 
