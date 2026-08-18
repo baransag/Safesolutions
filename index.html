@@ -1244,7 +1244,23 @@ img{max-width:100%;display:block;}
    ============================================================ */
 #projects{background:var(--navy);color:var(--white);overflow:hidden;}
 #projects .eyebrow{color:var(--gold);}
-#projects .section-head p{color:rgba(250,249,252,0.65);}
+#projects .section-head h2{
+  color:var(--white)!important;
+  font-weight:700;
+  letter-spacing:-0.015em;
+  text-shadow:0 3px 18px rgba(0,0,0,0.40);
+}
+#projects .section-head p{
+  color:rgba(250,249,252,0.74)!important;
+  font-weight:400;
+}
+#projects .section-head{
+  animation:projectHeadEntrance 0.85s cubic-bezier(0.22,1,0.36,1) backwards;
+}
+@keyframes projectHeadEntrance{
+  from{opacity:0;transform:translateY(22px);}
+  to{opacity:1;transform:translateY(0);}
+}
 
 .projects-marquee-wrap{
   position:relative;overflow:hidden;
@@ -1358,13 +1374,13 @@ img{max-width:100%;display:block;}
   border:1.5px solid rgba(226,58,86,0.18);
   box-shadow:0 6px 20px -6px rgba(18,11,46,0.22);
   will-change:transform;
-  padding:8px 14px;
+  padding:4px 8px;
   transition:transform 0.4s cubic-bezier(0.22,1,0.36,1),
     box-shadow 0.4s ease,border-color 0.3s ease;
 }
 .client-logo-card img{
-  width:100%;height:100%;
-  max-width:92%;max-height:88%;
+  width:94%;height:88%;
+  max-width:96%;max-height:90%;
   object-fit:contain!important;border-radius:0;
   display:block;
   transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);
@@ -1377,7 +1393,8 @@ img{max-width:100%;display:block;}
 }
 .client-logo-card:hover img{transform:scale(1.06);}
 @media(max-width:575px){
-  .client-logo-card{width:clamp(130px,34vw,175px);height:clamp(75px,20vw,95px);padding:6px 10px;}
+  .client-logo-card{width:clamp(130px,34vw,175px);height:clamp(75px,20vw,95px);padding:3px 6px;}
+  .client-logo-card img{width:94%;height:88%;max-width:96%;max-height:90%;}
 }
 
 /* CLIENT NAMES & NETWORK */
@@ -1597,12 +1614,14 @@ img{max-width:100%;display:block;}
 .calc-input.error{border-color:var(--gold);box-shadow:0 0 0 4px rgba(226,58,86,0.15);}
 /* Refined subtle slate/champagne-neutral unit badges — non-red */
 .calc-unit{
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  font-family:var(--font-mono);font-size:0.72rem;font-weight:600;
-  color:#C9BEDD;background:rgba(255,255,255,0.08);
-  border:1px solid rgba(201,190,221,0.24);
-  padding:3px 8px;border-radius:6px;
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-family:var(--font-mono);font-size:0.76rem;font-weight:700;
+  color:#DCD4E8;background:rgba(255,255,255,0.09);
+  border:1px solid rgba(201,190,221,0.28);
+  padding:4px 9px;border-radius:7px;
+  letter-spacing:0.02em;
   pointer-events:none;
+  box-shadow:0 2px 6px rgba(0,0,0,0.18);
 }
 .calc-error-msg{font-size:0.74rem;color:#E8967A;margin-top:6px;min-height:14px;font-family:var(--font-mono);}
 .calc-density-row{display:flex;gap:10px;}
@@ -4090,7 +4109,28 @@ function getReportData(calcType){
 function stripHtml(s){return(s||'').replace(/<[^>]*>/g,'').trim();}
 function isEmptyResult(s){const clean=stripHtml(s);return !clean||clean==='—'||clean==='N/A';}
 
-function generatePDF(calcType){
+function loadLogoDataUrl(url){
+  return new Promise((resolve)=>{
+    const img=new Image();
+    img.crossOrigin='Anonymous';
+    img.onload=()=>{
+      try{
+        const c=document.createElement('canvas');
+        c.width=img.naturalWidth||img.width||300;
+        c.height=img.naturalHeight||img.height||300;
+        const ctx=c.getContext('2d');
+        ctx.drawImage(img,0,0);
+        resolve(c.toDataURL('image/jpeg',0.95));
+      }catch(e){
+        resolve(null);
+      }
+    };
+    img.onerror=()=>resolve(null);
+    img.src=url;
+  });
+}
+
+async function generatePDF(calcType){
   const report=getReportData(calcType);
   if(!report) return;
   const hasResults=report.results.some(r=>!isEmptyResult(r[1]));
@@ -4109,14 +4149,25 @@ function generatePDF(calcType){
   doc.setFillColor(...navy);
   doc.rect(9,9,W-18,36,'F');
 
-  const logoEl=document.querySelector('img[src="images/logo.jpeg"]');
-  if(logoEl&&logoEl.complete&&logoEl.naturalWidth){
+  // Reliable logo loading from images/logo.jpeg
+  const logoData = await loadLogoDataUrl('images/logo.jpeg');
+  if(logoData){
     try{
-      const c=document.createElement('canvas');
-      c.width=logoEl.naturalWidth;c.height=logoEl.naturalHeight;
-      c.getContext('2d').drawImage(logoEl,0,0);
-      doc.addImage(c.toDataURL('image/jpeg'),'JPEG',14,12,28,28);
-    }catch(e){}
+      doc.addImage(logoData,'JPEG',14,12,28,28);
+    }catch(e){
+      console.warn('PDF header logo error:',e);
+    }
+  } else {
+    // Fallback if logo element exists in DOM
+    const logoEl=document.querySelector('img[src="images/logo.jpeg"]');
+    if(logoEl&&logoEl.complete&&logoEl.naturalWidth){
+      try{
+        const c=document.createElement('canvas');
+        c.width=logoEl.naturalWidth;c.height=logoEl.naturalHeight;
+        c.getContext('2d').drawImage(logoEl,0,0);
+        doc.addImage(c.toDataURL('image/jpeg'),'JPEG',14,12,28,28);
+      }catch(e){}
+    }
   }
 
   doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...white);
