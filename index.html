@@ -1595,12 +1595,12 @@ img{max-width:100%;display:block;}
   box-shadow:0 0 0 4px rgba(226,58,86,0.15);
 }
 .calc-input.error{border-color:var(--gold);box-shadow:0 0 0 4px rgba(226,58,86,0.15);}
-/* Refined muted neutral/slate unit badges */
+/* Refined subtle slate/champagne-neutral unit badges — non-red */
 .calc-unit{
   position:absolute;right:14px;top:50%;transform:translateY(-50%);
   font-family:var(--font-mono);font-size:0.72rem;font-weight:600;
-  color:rgba(250,249,252,0.65);background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.12);
+  color:#C9BEDD;background:rgba(255,255,255,0.08);
+  border:1px solid rgba(201,190,221,0.24);
   padding:3px 8px;border-radius:6px;
   pointer-events:none;
 }
@@ -1630,9 +1630,10 @@ img{max-width:100%;display:block;}
 .calc-result-row:last-of-type{border-bottom:none;padding-bottom:0;}
 .calc-result-row .rlab{font-size:0.88rem;font-weight:500;color:rgba(250,249,252,0.78);}
 .calc-result-row .rval{
-  font-family:var(--font-mono);font-size:1.85rem;font-weight:700;color:var(--gold);
+  font-family:var(--font-mono);font-size:2rem;font-weight:700;color:var(--gold);
+  display:inline-flex;align-items:baseline;gap:4px;
 }
-.calc-result-row .rval span.unit{font-size:0.95rem;color:rgba(250,249,252,0.55);margin-left:4px;}
+.calc-result-row .rval span.unit{font-size:0.95rem;font-weight:500;color:rgba(250,249,252,0.6);margin-left:4px;}
 .calc-pdf-btn{width:100%;margin-top:8px;justify-content:center;}
 .calc-note{font-size:0.78rem;color:rgba(250,249,252,0.44);margin-top:18px;line-height:1.6;}
 
@@ -1742,6 +1743,30 @@ img{max-width:100%;display:block;}
 .form-label-luxury{
   font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;
   text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;display:block;
+}
+
+/* Contact Location Map */
+.contact-map-wrapper{margin-top:40px;}
+.contact-map-card{
+  padding:36px;border-radius:24px;overflow:hidden;
+}
+.contact-map-header{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;margin-bottom:22px;
+}
+.contact-map-frame{
+  width:100%;height:380px;border-radius:18px;overflow:hidden;
+  border:1.5px solid var(--border-gold);
+  box-shadow:var(--shadow-md);position:relative;background:var(--ivory);
+}
+.contact-map-frame iframe{
+  display:block;width:100%;height:100%;border:0;
+}
+@media(max-width:767px){
+  .contact-map-card{padding:22px 18px;}
+  .contact-map-frame{height:280px;border-radius:14px;}
+  .contact-map-header{flex-direction:column;align-items:flex-start;}
+  .contact-map-header .btn-luxury{width:100%;justify-content:center;}
 }
 
 /* ============================================================
@@ -2425,7 +2450,7 @@ html.lenis{height:auto;}
             <div class="calc-result-row"><span class="rlab">Grout Required (Volume)</span><span class="rval" id="grout-l">—<span class="unit">L</span></span></div>
             <div class="calc-result-row"><span class="rlab">Grout Required (Weight)</span><span class="rval" id="grout-kg">—<span class="unit">kg</span></span></div>
             <button class="btn-luxury btn-gold calc-pdf-btn" onclick="generatePDF('grout')"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</button>
-            <div class="calc-note">Calculated in accordance with Safe Solutions engineering standards and verified reference formulas. Volume (L) = (L+W)/(L×W) × Joint × Thickness × Area. Weight (kg) = Volume × Density.</div>
+            <div class="calc-note">Theoretical consumption formula: kg/m² = ((L+W) × Joint × Thickness × Density) / (L×W). Volume (L) = Weight / Density. Zero wastage included by default.</div>
           </div>
         </div>
       </div>
@@ -2620,6 +2645,34 @@ html.lenis{height:auto;}
             </div>
           </div>
         </form>
+      </div>
+    </div>
+    
+    <!-- OUR LOCATION MAP -->
+    <div class="contact-map-wrapper" data-aos="fade-up" data-aos-delay="100">
+      <div class="glass-card contact-map-card">
+        <div class="contact-map-header">
+          <div>
+            <div class="eyebrow" style="margin-bottom:6px;">OUR LOCATION</div>
+            <h3 style="font-family:var(--font-display);font-size:1.35rem;color:var(--navy);margin-bottom:4px;font-weight:700;">Safe Solutions Headquarters</h3>
+            <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:0;">82-B Commercial Center, Millat Chowk, Main Sheikhupura Road, Faisalabad, Pakistan</p>
+          </div>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=82-B+Commercial+Center+Millat+Chowk+Main+Sheikhupura+Road+Faisalabad+Pakistan" target="_blank" rel="noopener" class="btn-luxury btn-gold" style="padding:10px 22px;font-size:0.85rem;white-space:nowrap;">
+            <i class="fa-solid fa-diamond-turn-right"></i> Get Directions
+          </a>
+        </div>
+        <div class="contact-map-frame">
+          <iframe 
+            title="Safe Solutions Location Map"
+            src="https://maps.google.com/maps?q=82-B+Commercial+Center+Millat+Chowk+Main+Sheikhupura+Road+Faisalabad+Pakistan&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -3924,14 +3977,13 @@ function calcGrout(){
     document.getElementById('grout-kg').innerHTML='—<span class="unit">kg</span>';
     return;
   }
-  const D22 = (L + (W * T * J * D));
-  const D24 = (L * W);
-  const F23 = D22 / D24;
-  const totalKg = F23 * A;
+  // Sika theoretical formula: kg/m² = ((L + W) * J * T * D) / (L * W)
+  const kgPerM2 = ((L + W) * J * T * D) / (L * W);
+  const totalKg = kgPerM2 * A;
   const totalLiters = totalKg / D;
 
-  document.getElementById('grout-l').innerHTML=totalLiters.toFixed(2)+'<span class="unit">L</span>';
-  document.getElementById('grout-kg').innerHTML=totalKg.toFixed(2)+'<span class="unit">kg</span>';
+  document.getElementById('grout-l').innerHTML=totalLiters.toFixed(2)+' <span class="unit">L</span>';
+  document.getElementById('grout-kg').innerHTML=totalKg.toFixed(2)+' <span class="unit">kg</span>';
 }
 ['grout-length','grout-width','grout-thickness','grout-joint','grout-area','grout-density'].forEach(id=>{
   const el=document.getElementById(id);
