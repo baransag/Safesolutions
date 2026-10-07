@@ -2111,6 +2111,22 @@ html.lenis{height:auto;}
   object-fit:cover;object-position:30% center;background:none;
 }
 .product-item-card .product-item-body{flex:1;}
+
+/* Dropdown: sub-headings under Waterproofing */
+.nav-products-dropdown .nav-cat-row.nav-sub-row,
+.nav-products-dropdown .nav-cat-row.nav-sub-row:hover{padding-left:50px!important;padding-top:9px;padding-bottom:9px;}
+.nav-sub-row{position:relative;}
+.nav-sub-row::before{
+  content:'';position:absolute;left:34px;top:0;bottom:50%;width:12px;
+  border-left:2px solid rgba(197,3,55,0.35);border-bottom:2px solid rgba(197,3,55,0.35);
+  border-bottom-left-radius:8px;pointer-events:none;
+}
+.nav-sub-row + .nav-sub-row::before{top:-50%;bottom:50%;}
+.nav-sub-row .ncat-name{font-size:0.86rem;font-weight:600;}
+.nav-sub-row .ncat-icon{width:26px;height:26px;font-size:0.72rem;}
+
+/* Dropdown: clean rows without the mono numbers */
+.nav-products-dropdown .ncat-num{display:none;}
 </style>
 </head>
 <body id="top">
@@ -2214,6 +2230,16 @@ html.lenis{height:auto;}
                 <span class="ncat-name">Waterproofing</span>
                 <i class="fa-solid fa-chevron-right ncat-arrow"></i>
               </a>
+              <a href="#products" class="nav-cat-row nav-sub-row" data-cat="bituminous-membranes">
+                <span class="ncat-icon"><i class="fa-solid fa-layer-group"></i></span>
+                <span class="ncat-name">Bituminous Waterproofing</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row nav-sub-row" data-cat="polyurethane-waterproofing">
+                <span class="ncat-icon"><i class="fa-solid fa-droplet"></i></span>
+                <span class="ncat-name">Polyurethane Waterproofing</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
               <a href="#products" class="nav-cat-row" data-cat="grout-anchoring">
                 <span class="ncat-icon"><i class="fa-solid fa-anchor"></i></span>
                 <span class="ncat-num">03.</span>
@@ -2280,21 +2306,9 @@ html.lenis{height:auto;}
                 <span class="ncat-name">Crack Repairing &amp; Injection</span>
                 <i class="fa-solid fa-chevron-right ncat-arrow"></i>
               </a>
-              <a href="#products" class="nav-cat-row" data-cat="bituminous-membranes">
-                <span class="ncat-icon"><i class="fa-solid fa-layer-group"></i></span>
-                <span class="ncat-num">14.</span>
-                <span class="ncat-name">Bituminous Membranes</span>
-                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
-              </a>
-              <a href="#products" class="nav-cat-row" data-cat="polyurethane-waterproofing">
-                <span class="ncat-icon"><i class="fa-solid fa-droplet"></i></span>
-                <span class="ncat-num">15.</span>
-                <span class="ncat-name">Polyurethane Liquid Waterproofing</span>
-                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
-              </a>
               <a href="#products" class="nav-cat-row" data-cat="epoxy-flooring">
                 <span class="ncat-icon"><i class="fa-solid fa-brush"></i></span>
-                <span class="ncat-num">16.</span>
+                <span class="ncat-num">14.</span>
                 <span class="ncat-name">Epoxy Flooring</span>
                 <i class="fa-solid fa-chevron-right ncat-arrow"></i>
               </a>
