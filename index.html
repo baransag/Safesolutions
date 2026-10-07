@@ -2127,6 +2127,14 @@ html.lenis{height:auto;}
 
 /* Dropdown: clean rows without the mono numbers */
 .nav-products-dropdown .ncat-num{display:none;}
+
+/* Waterproofing sub-headings: shown only after clicking Waterproofing */
+.nav-category-list .nav-sub-row{display:none;}
+.nav-category-list.subs-open .nav-sub-row{display:flex;animation:subRowIn .5s cubic-bezier(0.22,1,0.36,1) both;}
+.nav-category-list.subs-open .nav-sub-row + .nav-sub-row{animation-delay:.08s;}
+@keyframes subRowIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+.nav-cat-row.has-subs .ncat-arrow{transition:transform .35s ease;}
+.nav-category-list.subs-open .nav-cat-row.has-subs .ncat-arrow{transform:rotate(90deg);}
 </style>
 </head>
 <body id="top">
@@ -2224,7 +2232,7 @@ html.lenis{height:auto;}
                 <span class="ncat-name">Concrete Admixtures</span>
                 <i class="fa-solid fa-chevron-right ncat-arrow"></i>
               </a>
-              <a href="#products" class="nav-cat-row" data-cat="waterproofing">
+              <a href="#products" class="nav-cat-row has-subs" data-cat="waterproofing">
                 <span class="ncat-icon"><i class="fa-solid fa-droplet"></i></span>
                 <span class="ncat-num">02.</span>
                 <span class="ncat-name">Waterproofing</span>
@@ -3991,7 +3999,15 @@ const openNavProd = () => {
 };
 const closeNavProd = () => {
   clearTimeout(navProdTimer);
-  if (navProdItem) navProdItem.classList.remove('dropdown-open');
+  if (navProdItem) {
+    navProdItem.classList.remove('dropdown-open');
+    setTimeout(() => {
+      if (!navProdItem.classList.contains('dropdown-open')) {
+        const l = navProdItem.querySelector('.nav-category-list');
+        if (l) l.classList.remove('subs-open');
+      }
+    }, 450);
+  }
 };
 if (navProdItem) {
   navProdItem.addEventListener('mouseenter', openNavProd);
@@ -4011,6 +4027,15 @@ document.querySelectorAll('.nav-cat-row').forEach(row => {
   row.addEventListener('click', (e) => {
     e.preventDefault();
     const cat = row.getAttribute('data-cat');
+    // Waterproofing: reveal / hide its sub-headings and keep the dropdown open
+    if (row.classList.contains('has-subs')) {
+      const list = row.closest('.nav-category-list');
+      if (list) list.classList.toggle('subs-open');
+      history.pushState(null, null, '#products');
+      showView('products', true);
+      selectCategory(cat);
+      return;
+    }
     closeNavProd();
     
     // Close mobile menu if open
