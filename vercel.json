@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/tile-grout-calculator", "destination": "/index.html" },
+    { "source": "/calculators", "destination": "/index.html" }
+  ]
+}

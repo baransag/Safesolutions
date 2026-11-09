@@ -2295,6 +2295,61 @@ html.lenis{height:auto;}
 #calculators .crh-txt em{font-size:0.76rem;font-weight:700;color:#fff;}
 #calculators .calc-pdf-btn{font-size:0.92rem;font-weight:800;}
 #calculators .calc-note{font-size:0.8rem;font-weight:600;color:#35446B;line-height:1.6;}
+
+/* ===== v15b: unit suffix, preview animation ===== */
+#calculators .calc-input{padding-right:78px;}
+#calculators .calc-unit{
+  right:0;top:0;bottom:0;transform:none;width:66px;display:flex;align-items:center;justify-content:center;
+  border:0;border-left:1.5px solid #D9DFEC;border-radius:0 10px 10px 0;background:#EEF1F8;box-shadow:none;padding:0;
+  font-family:var(--font-body);font-size:0.95rem;font-weight:800;letter-spacing:0.02em;color:#021C4F;text-transform:none;
+}
+#calculators .calc-input-wrap:focus-within .calc-unit{background:#C50337;color:#fff;border-left-color:#C50337;transition:all .25s ease;}
+.calc-preview{position:relative;grid-column:1/-1;margin:8px 0 0;padding:12px 14px 12px;border-radius:16px;background:#fff;border:1px solid #EBD9DE;overflow:hidden;}
+.tg-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+.tg-head span{font-size:0.82rem;font-weight:800;color:#021C4F;}
+.tg-head i{color:#C50337;margin-right:6px;}
+.tg-head em{font-style:normal;font-size:0.74rem;font-weight:700;color:#C50337;font-family:var(--font-mono);}
+#tgSvg{width:100%;height:auto;display:block;background:linear-gradient(180deg,#F7F4F0,#fff);border-radius:12px;}
+#tgSvg text{font-family:'Inter',sans-serif;}
+#tgSvg .tg-scene{opacity:0;pointer-events:none;transition:opacity .35s ease;}
+#tgSvg .tg-scene.on{opacity:1;}
+#tgSvg .tg-tile{fill:url(#tgTileG);stroke:#021C4F;stroke-width:1.5;}
+#tgSvg .tg-shine{fill:rgba(255,255,255,0.28);}
+#tgSvg .tg-dim{stroke:#C50337;stroke-width:2.2;fill:none;stroke-linecap:round;}
+#tgSvg .tg-tick{stroke:#C50337;stroke-width:1.5;}
+#tgSvg .tg-edge{stroke:#C50337;stroke-width:4;stroke-linecap:round;}
+#tgSvg .tg-lbl{font-size:15px;font-weight:800;fill:#021C4F;text-anchor:middle;}
+#tgSvg .tg-lbl.l{text-anchor:start;}
+#tgSvg .tg-lbl b{fill:#C50337;}
+#tgSvg .tg-sub{font-size:11px;font-weight:700;fill:#5B6783;letter-spacing:.08em;text-anchor:middle;}
+#tgSvg .tg-sub.l{text-anchor:start;}
+#tgSvg .tg-val{font-size:22px;font-weight:800;fill:#C50337;text-anchor:middle;}
+#tgSvg .tg-val.l{text-anchor:start;}
+#tgSvg .tg-grout{fill:#8F9AB3;}
+#tgSvg .tg-hot{fill:#C50337;}
+#tgSvg .tg-floor{fill:#D9DFEC;}
+.tg-scene.on .tg-draw{stroke-dasharray:var(--len,400);stroke-dashoffset:var(--len,400);animation:tgDraw .7s .15s ease forwards;}
+@keyframes tgDraw{to{stroke-dashoffset:0;}}
+.tg-scene.on .tg-fade{animation:tgFade .5s .55s ease both;}
+@keyframes tgFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.tg-scene.on .tg-float{animation:tgFloat 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+@keyframes tgFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.tg-scene.on .tg-pop{transform-box:fill-box;transform-origin:center;animation:cpPop .5s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(var(--i)*14ms);}
+.tg-scene.on .tg-rise{transform-box:fill-box;transform-origin:bottom;animation:tgRise .7s .3s cubic-bezier(.2,.9,.3,1) both;}
+@keyframes tgRise{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+.tg-scene.on .tg-slide-l{animation:tgSlideL .6s .2s ease both;}
+.tg-scene.on .tg-slide-r{animation:tgSlideR .6s .2s ease both;}
+@keyframes tgSlideL{from{transform:translateX(-40px);opacity:0;}to{transform:none;opacity:1;}}
+@keyframes tgSlideR{from{transform:translateX(40px);opacity:0;}to{transform:none;opacity:1;}}
+#tgSvg .tg-liq{transform-box:fill-box;transform-origin:bottom;transition:transform .6s cubic-bezier(.2,.9,.3,1);}
+@keyframes cpPop{from{opacity:0;transform:scale(.4);}to{opacity:1;transform:scale(1);}}
+.tg-steps{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.tg-steps button{flex:1 1 0;min-width:84px;padding:7px 8px;border-radius:100px;border:1.5px solid #E3DAD7;background:#fff;color:#021C4F;font-size:0.76rem;font-weight:800;cursor:pointer;transition:all .25s ease;}
+.tg-steps button:hover{border-color:#C50337;color:#C50337;}
+.tg-steps button.on{background:linear-gradient(135deg,#C50337,#8E0227);color:#fff;border-color:transparent;box-shadow:0 8px 18px -10px rgba(197,3,55,.7);}
+.calc-spark{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:5;animation:calcSpark 1s cubic-bezier(.2,.8,.3,1) forwards;}
+@keyframes calcSpark{from{opacity:1;transform:translate(0,0) rotate(0) scale(1);}to{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.4);}}
+@media (prefers-reduced-motion:reduce){#tgSvg *,.calc-spark{animation:none!important;transition:none!important;}.tg-scene.on .tg-draw{stroke-dashoffset:0;}}
 </style>
 </head>
 <body id="top">
@@ -2381,7 +2436,7 @@ html.lenis{height:auto;}
             <div class="nav-dropdown-header">
               <span>PRODUCT CATEGORIES</span>
               <span class="nav-dropdown-header-right">
-                <span class="badge-cat-count">22 Categories</span>
+                <span class="badge-cat-count">23 Categories</span>
                 <button type="button" class="nav-dropdown-close" id="navProductsClose" aria-label="Close product categories"><i class="fa-solid fa-xmark"></i></button>
               </span>
             </div>
@@ -2444,6 +2499,11 @@ html.lenis{height:auto;}
               <a href="#products" class="nav-cat-row" data-cat="anchoring">
                 <span class="ncat-icon"><i class="fa-solid fa-anchor"></i></span>
                 <span class="ncat-name">Anchoring</span>
+                <i class="fa-solid fa-chevron-right ncat-arrow"></i>
+              </a>
+              <a href="#products" class="nav-cat-row" data-cat="steel-anchors-grouting">
+                <span class="ncat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                <span class="ncat-name">Steel Anchors &amp; Grouting</span>
                 <i class="fa-solid fa-chevron-right ncat-arrow"></i>
               </a>
               <a href="#products" class="nav-cat-row" data-cat="tile-fixing">
@@ -2655,7 +2715,7 @@ html.lenis{height:auto;}
           <i class="fa-solid fa-list-ul"></i><span>Detailed View</span>
         </button>
         <button type="button" class="view-switch-btn" id="btnViewGrid" aria-label="Grid View">
-          <i class="fa-solid fa-table-cells-large"></i><span>Grid View (All 22)</span>
+          <i class="fa-solid fa-table-cells-large"></i><span>Grid View (All 23)</span>
         </button>
       </div>
     </div>
@@ -2867,10 +2927,10 @@ html.lenis{height:auto;}
     
     <!-- TABS: WATERPROOFING CALCULATOR IS EXPLICITLY REMOVED -->
     <div class="calc-tabs" data-aos="fade-up" data-aos-delay="100">
-      <div class="calc-tab active" data-calc="grout"><i class="fa-solid fa-border-all"></i> Tile Grout</div>
-      <div class="calc-tab" data-calc="concrete"><i class="fa-solid fa-cubes"></i> Concrete</div>
-      <div class="calc-tab" data-calc="brick"><i class="fa-solid fa-trowel-square"></i> Brick</div>
-      <div class="calc-tab" data-calc="plaster"><i class="fa-solid fa-layer-group"></i> Plaster</div>
+      <div class="calc-tab active" data-calc="grout"><i class="fa-solid fa-border-all"></i> Tile Grout Calculator</div>
+      <div class="calc-tab" data-calc="concrete" hidden style="display:none"><i class="fa-solid fa-cubes"></i> Concrete</div>
+      <div class="calc-tab" data-calc="brick" hidden style="display:none"><i class="fa-solid fa-trowel-square"></i> Brick</div>
+      <div class="calc-tab" data-calc="plaster" hidden style="display:none"><i class="fa-solid fa-layer-group"></i> Plaster</div>
     </div>
 
     <!-- TILE GROUT -->
@@ -2919,6 +2979,18 @@ html.lenis{height:auto;}
                 <button type="button" class="density-chip" data-val="2.10">2.10</button>
               </div>
               <div class="calc-error-msg" id="err-grout-density"></div>
+            </div>
+          <div class="calc-preview tg" id="groutPreview" aria-hidden="true">
+              <div class="tg-head"><span><i class="fa-solid fa-ruler-combined"></i> Tile Guide</span><em id="tgHint">Click any field — the tile shows it</em></div>
+              <svg id="tgSvg" viewBox="0 0 560 210" preserveAspectRatio="xMidYMid meet"></svg>
+              <div class="tg-steps" id="tgSteps">
+                <button type="button" data-f="grout-length" data-s="length">1 Length</button>
+                <button type="button" data-f="grout-width" data-s="width">2 Width</button>
+                <button type="button" data-f="grout-thickness" data-s="thickness">3 Thickness</button>
+                <button type="button" data-f="grout-joint" data-s="joint">4 Joint</button>
+                <button type="button" data-f="grout-area" data-s="area">5 Area</button>
+                <button type="button" data-f="grout-density" data-s="density">6 Density</button>
+              </div>
             </div>
           </div>
           <div class="calc-results"><div class="calc-res-head"><span class="crh-ico"><i class="fa-solid fa-calculator"></i></span><span class="crh-txt"><b>Estimated Requirement</b><em>Updates live as you type</em></span></div>
@@ -3417,15 +3489,20 @@ const productsData = [
     {src:"images/Swellable-Bar-App2.jpeg", fb:"images/Project-WASA-Reservoir.jpeg", alt:"Reservoir Joint Sealing"},
     {src:"images/Swellable-Bar-App3.jpeg", fb:"images/Project-NLC-Underpass.jpeg", alt:"Pipe Penetration Sealing"}
   ]},
-  {id:"grouts", img:"images/Grouts.jpeg", imgFb:"images/Anchoring-Grouting.jpeg", name:"Grouts", icon:"fa-bucket", cat:"products", desc:"Non-shrink precision cementitious and epoxy grouts for machine bases, baseplates, precast joints and structural bedding.", subcategories:["Non-Shrink Precision Grouts","High Early Strength Bedding","Heavy Machine Equipment Bedding","Flowable Cementitious Grouts"], benefits:["Zero shrinkage compensation","Ultra-high early and ultimate compressive strength","Dynamic vibration and impact resistance","High flowability without segregation"], applications:["Heavy machine equipment dynamic bedding","Structural column baseplate grouting","Bridge bearing plates and precast joints","Gap filling under steel and concrete elements"], tech:"Conforms to BS EN 1504-6 and ASTM C1107 Grade C.", usage:"Mix with measured clean water. Pour or pump continuously from one side to eliminate air entrapment.", appImages:[
-    {src:"images/Grouts-App1.jpeg", fb:"images/Anchoring-Grouting.jpeg", alt:"Grouting Application"},
-    {src:"images/Grouts-App2.jpeg", fb:"images/Hero-02.jpeg", alt:"Heavy Machinery Bedding"},
-    {src:"images/Grouts-App3.jpeg", fb:"images/Hero-03.jpeg", alt:"Structural Baseplate Grouting"}
+  {id:"grouts", img:"images/Anchoring.jpeg", imgFb:"images/Anchoring-Grouting.jpeg", name:"Grouts", icon:"fa-bucket", cat:"products", desc:"Non-shrink precision cementitious and epoxy grouts for machine bases, baseplates, precast joints and structural bedding.", subcategories:["Non-Shrink Precision Grouts","High Early Strength Bedding","Heavy Machine Equipment Bedding","Flowable Cementitious Grouts"], benefits:["Zero shrinkage compensation","Ultra-high early and ultimate compressive strength","Dynamic vibration and impact resistance","High flowability without segregation"], applications:["Heavy machine equipment dynamic bedding","Structural column baseplate grouting","Bridge bearing plates and precast joints","Gap filling under steel and concrete elements"], tech:"Conforms to BS EN 1504-6 and ASTM C1107 Grade C.", usage:"Mix with measured clean water. Pour or pump continuously from one side to eliminate air entrapment.", appImages:[
+    {src:"images/Anchoring-App1.jpeg", fb:"images/Anchoring-Grouting.jpeg", alt:"Grouting Application"},
+    {src:"images/Anchoring-App2.jpeg", fb:"images/Hero-02.jpeg", alt:"Heavy Machinery Bedding"},
+    {src:"images/Anchoring-App3.jpeg", fb:"images/Hero-03.jpeg", alt:"Structural Baseplate Grouting"}
   ]},
-  {id:"anchoring", img:"images/Anchoring.jpeg", imgFb:"images/Anchoring-Grouting.jpeg", name:"Anchoring", icon:"fa-anchor", cat:"products", desc:"Structural high-load anchoring systems for steel anchors, starter bars and rebar post-fixing in concrete.", subcategories:["Steel Anchoring","Chemical Anchor Capsules & Resins","Starter Bar & Rebar Post-Fixing","Heavy Equipment Anchor Bolts"], benefits:["High pull-out and shear capacity","Fast cure for early loading","Suitable for cracked and uncracked concrete","Vibration and dynamic load resistance"], applications:["Steel anchoring for structural columns and baseplates","Starter bar and rebar post-fixing","Machinery foundation anchor bolts","Retrofit and strengthening works"], tech:"Conforms to BS EN 1504-6 and ASTM C881.", usage:"Drill to specified diameter and depth, clean the hole thoroughly, inject resin from the bottom and insert the anchor with a twisting motion.", appImages:[
-    {src:"images/Anchoring-App1.jpeg", fb:"images/Anchoring-Grouting.jpeg", alt:"Anchor Installation"},
-    {src:"images/Anchoring-App2.jpeg", fb:"images/Hero-02.jpeg", alt:"Rebar Post-Fixing"},
-    {src:"images/Anchoring-App3.jpeg", fb:"images/Hero-03.jpeg", alt:"Structural Steel Anchoring"}
+  {id:"anchoring", img:"images/Grouts.jpeg", imgFb:"images/Anchoring-Grouting.jpeg", name:"Anchoring", icon:"fa-anchor", cat:"products", desc:"Structural high-load anchoring systems for steel anchors, starter bars and rebar post-fixing in concrete.", subcategories:["Steel Anchoring","Chemical Anchor Capsules & Resins","Starter Bar & Rebar Post-Fixing","Heavy Equipment Anchor Bolts"], benefits:["High pull-out and shear capacity","Fast cure for early loading","Suitable for cracked and uncracked concrete","Vibration and dynamic load resistance"], applications:["Steel anchoring for structural columns and baseplates","Starter bar and rebar post-fixing","Machinery foundation anchor bolts","Retrofit and strengthening works"], tech:"Conforms to BS EN 1504-6 and ASTM C881.", usage:"Drill to specified diameter and depth, clean the hole thoroughly, inject resin from the bottom and insert the anchor with a twisting motion.", appImages:[
+    {src:"images/Grouts-App1.jpeg", fb:"images/Anchoring-Grouting.jpeg", alt:"Anchor Installation"},
+    {src:"images/Grouts-App2.jpeg", fb:"images/Hero-02.jpeg", alt:"Rebar Post-Fixing"},
+    {src:"images/Grouts-App3.jpeg", fb:"images/Hero-03.jpeg", alt:"Structural Steel Anchoring"}
+  ]},
+  {id:"steel-anchors-grouting", img:"images/Steel-Anchors-Grouting.jpeg", imgFb:"images/Anchoring-Grouting.jpeg", name:"Steel Anchors & Grouting", icon:"fa-screwdriver-wrench", cat:"products", desc:"Complete steel anchoring and grouting solutions for anchor bolts, base plates and machinery foundations, fixed and bedded in one system.", subcategories:["Anchor Bolt Fixing & Grouting","Base Plate & Column Bedding","Machinery Foundation Grouting","Chemical & Cementitious Anchor Systems"], benefits:["High pull-out and load-bearing capacity","Non-shrink, void-free bedding under plates","Fast strength gain for quick project turnaround","Suitable for dynamic and vibrating loads"], applications:["Steel structure column base plates","Heavy machinery and equipment foundations","Precast and bridge bearing installations","Industrial plants and power facilities"], tech:"Non-shrink cementitious / epoxy grouts with chemical or mechanical steel anchor systems.", usage:"Clean and roughen the substrate, fix the anchors, then pour or inject grout continuously to avoid air entrapment. Cure as per the data sheet.", appImages:[
+    {src:"images/Steel-Anchors-Grouting-App1.jpeg", fb:"images/Anchoring-Grouting.jpeg", alt:"Anchor Bolt Grouting"},
+    {src:"images/Steel-Anchors-Grouting-App2.jpeg", fb:"images/Hero-02.jpeg", alt:"Base Plate Grouting"},
+    {src:"images/Steel-Anchors-Grouting-App3.jpeg", fb:"images/Hero-03.jpeg", alt:"Machinery Foundation Anchoring"}
   ]},
   {id:"tile-fixing", img:"images/Tile-Fixing.jpeg", imgFb:"images/Adhesives.jpeg", name:"Tile Bond", icon:"fa-border-all", cat:"products", desc:"Polymer-modified cementitious and epoxy tile adhesives for porcelain, ceramic, granite and large-format slabs.", subcategories:["C2TE Standard Tile Adhesives","S1 Flexible Porcelain Mortars","Submerged Swimming Pool Adhesives","Non-Slip Large-Format Mortars"], benefits:["Zero vertical slip formula","High initial grab and tensile bond strength","Extended open time for precise alignment","Suitable for interior and exterior submerged areas"], applications:["Large-format porcelain floor tiles","Commercial mall walkways and lobbies","Swimming pools and water features","External building facade cladding"], tech:"Conforms to EN 12004 Class C2TE S1.", usage:"Mix with specified water ratio and comb with notched trowel. Butter tile backs for large formats.", appImages:[
     // TILE FIXING & ADHESIVES — APPLICATION IMAGE 1
@@ -4829,6 +4906,177 @@ async function generatePDF(calcType){
 
   doc.save(`SafeSolutions-${report.title.replace(/\s+/g,'-')}.pdf`);
 }
+
+
+/* ============================================================
+   TILE GROUT — interactive tile guide + sparkle
+   ============================================================ */
+(function tileGuide(){
+  const svg=document.getElementById('tgSvg'); if(!svg) return;
+  const hint=document.getElementById('tgHint'), steps=document.querySelectorAll('#tgSteps button');
+  const $=id=>document.getElementById(id);
+  const F={length:$('grout-length'),width:$('grout-width'),thickness:$('grout-thickness'),joint:$('grout-joint'),area:$('grout-area'),density:$('grout-density')};
+  const HINT={idle:'Click any field — the tile shows it',length:'Length of one tile',width:'Width of one tile',thickness:'Tile thickness (side view)',joint:'Gap between two tiles',area:'Whole floor covered',density:'Grout density'};
+  const val=(k,d)=>{const v=parseFloat(F[k].value);return isFinite(v)&&v>0?v:d;};
+  const fmt=n=>(Math.round(n*100)/100).toString();
+
+  /* static scene markup, updated by attribute afterwards */
+  svg.innerHTML=`
+  <defs><linearGradient id="tgTileG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2D4F8F"/><stop offset="1" stop-color="#021C4F"/></linearGradient>
+  <clipPath id="tgBucketClip"><path d="M236 46 H324 L314 150 H246 Z"/></clipPath>
+  <marker id="tgArr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 Z" fill="#C50337"/></marker></defs>
+
+  <g class="tg-scene" id="sc-idle">
+    <g class="tg-float"><rect class="tg-tile" data-t rx="4"/><path class="tg-shine" data-shine/></g>
+    <text class="tg-sub" x="280" y="196">TILE GUIDE</text>
+  </g>
+
+  <g class="tg-scene" id="sc-length">
+    <rect class="tg-tile" data-t rx="4"/><path class="tg-shine" data-shine/>
+    <line class="tg-edge tg-draw" data-top style="--len:400"/><line class="tg-edge tg-draw" data-bot style="--len:400"/>
+    <line class="tg-tick" data-e1/><line class="tg-tick" data-e2/>
+    <line class="tg-dim tg-draw" data-dim marker-start="url(#tgArr)" marker-end="url(#tgArr)" style="--len:400"/>
+    <g class="tg-fade"><text class="tg-sub" data-sub1 x="280" y="0">LENGTH</text><text class="tg-val" data-v1 x="280" y="0"></text></g>
+  </g>
+
+  <g class="tg-scene" id="sc-width">
+    <rect class="tg-tile" data-t rx="4"/><path class="tg-shine" data-shine/>
+    <line class="tg-edge tg-draw" data-lft style="--len:300"/><line class="tg-edge tg-draw" data-rgt style="--len:300"/>
+    <line class="tg-tick" data-e1/><line class="tg-tick" data-e2/>
+    <line class="tg-dim tg-draw" data-dim marker-start="url(#tgArr)" marker-end="url(#tgArr)" style="--len:300"/>
+    <g class="tg-fade"><text class="tg-sub l" data-sub1>WIDTH</text><text class="tg-val l" data-v1></text></g>
+  </g>
+
+  <g class="tg-scene" id="sc-thickness">
+    <rect class="tg-floor" x="150" y="150" width="260" height="12" rx="2"/>
+    <text class="tg-sub" x="280" y="180">ADHESIVE BED</text>
+    <rect class="tg-tile tg-rise" data-slab x="150" width="260" rx="3"/>
+    <line class="tg-dim tg-draw" data-dim marker-start="url(#tgArr)" marker-end="url(#tgArr)" style="--len:120"/>
+    <g class="tg-fade"><text class="tg-sub l" data-sub1>THICKNESS</text><text class="tg-val l" data-v1></text></g>
+    <text class="tg-sub l" x="150" y="28">SIDE VIEW</text>
+  </g>
+
+  <g class="tg-scene" id="sc-joint">
+    <rect class="tg-tile tg-slide-l" data-ja rx="4" y="66" height="94" width="150"/>
+    <rect class="tg-tile tg-slide-r" data-jb rx="4" y="66" height="94" width="150"/>
+    <rect class="tg-hot tg-rise" data-gap y="66" height="94"/>
+    <line class="tg-dim" data-ar1 marker-end="url(#tgArr)"/><line class="tg-dim" data-ar2 marker-end="url(#tgArr)"/>
+    <g class="tg-fade"><text class="tg-sub" data-sub1 x="280" y="18">JOINT WIDTH</text><text class="tg-val" data-v1 x="280" y="41"></text></g>
+    <text class="tg-sub" x="280" y="184">GROUT FILLS THE GAP</text>
+  </g>
+
+  <g class="tg-scene" id="sc-area">
+    <rect class="tg-grout" x="70" y="18" width="420" height="132" rx="6"/>
+    <g data-grid></g>
+    <g class="tg-fade"><text class="tg-sub" data-sub1 x="280" y="172">TOTAL AREA</text><text class="tg-val" data-v1 x="280" y="196"></text></g>
+  </g>
+
+  <g class="tg-scene" id="sc-density">
+    <g clip-path="url(#tgBucketClip)"><rect class="tg-floor" x="230" y="40" width="100" height="112"/><rect class="tg-grout tg-liq" data-liq x="230" y="40" width="100" height="112"/></g>
+    <path d="M236 46 H324 L314 150 H246 Z" fill="none" stroke="#021C4F" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M238 60 Q280 20 322 60" fill="none" stroke="#021C4F" stroke-width="3"/>
+    <g class="tg-fade"><text class="tg-sub l" data-sub1 x="352" y="86">DENSITY</text><text class="tg-val l" data-v1 x="352" y="112"></text><text class="tg-sub l" x="352" y="132">heavier = fuller bucket</text></g>
+  </g>`;
+
+  const S={}; ['idle','length','width','thickness','joint','area','density'].forEach(k=>S[k]=$('sc-'+k));
+  const q=(sc,a)=>S[sc].querySelector('['+a+']');
+  const set=(el,o)=>{for(const k in o)el.setAttribute(k,o[k]);};
+
+  function geom(){
+    const l=val('length',600),w=val('width',600);
+    const sc=Math.min(260/l,110/w);
+    let tw=Math.max(70,l*sc), th=Math.max(50,w*sc);
+    return {l,w,tw,th,tx:280-tw/2,ty:82-th/2};
+  }
+  function updateTile(sc,g){
+    S[sc].querySelectorAll('[data-t]').forEach(r=>set(r,{x:g.tx,y:g.ty,width:g.tw,height:g.th}));
+    S[sc].querySelectorAll('[data-shine]').forEach(p=>set(p,{d:`M${g.tx+8} ${g.ty+g.th-6} L${g.tx+g.tw*0.42} ${g.ty+6} L${g.tx+g.tw*0.58} ${g.ty+6} L${g.tx+22} ${g.ty+g.th-6}Z`}));
+  }
+  function update(){
+    const g=geom(),{tx,ty,tw,th}=g;
+    updateTile('idle',g); updateTile('length',g); updateTile('width',g);
+    /* length */
+    set(q('length','data-top'),{x1:tx,y1:ty,x2:tx+tw,y2:ty}); set(q('length','data-bot'),{x1:tx,y1:ty+th,x2:tx+tw,y2:ty+th});
+    const dy=ty+th+26;
+    set(q('length','data-dim'),{x1:tx,y1:dy,x2:tx+tw,y2:dy}); set(q('length','data-e1'),{x1:tx,y1:ty+th+8,x2:tx,y2:dy+8}); set(q('length','data-e2'),{x1:tx+tw,y1:ty+th+8,x2:tx+tw,y2:dy+8});
+    set(q('length','data-sub1'),{y:dy+22}); set(q('length','data-v1'),{y:dy+44}); q('length','data-v1').textContent=fmt(g.l)+' mm';
+    /* width */
+    set(q('width','data-lft'),{x1:tx,y1:ty,x2:tx,y2:ty+th}); set(q('width','data-rgt'),{x1:tx+tw,y1:ty,x2:tx+tw,y2:ty+th});
+    const dx=tx+tw+30;
+    set(q('width','data-dim'),{x1:dx,y1:ty,x2:dx,y2:ty+th}); set(q('width','data-e1'),{x1:tx+tw+8,y1:ty,x2:dx+8,y2:ty}); set(q('width','data-e2'),{x1:tx+tw+8,y1:ty+th,x2:dx+8,y2:ty+th});
+    set(q('width','data-sub1'),{x:dx+16,y:82-6}); set(q('width','data-v1'),{x:dx+16,y:82+20}); q('width','data-v1').textContent=fmt(g.w)+' mm';
+    /* thickness */
+    const t=val('thickness',10), tk=Math.max(12,Math.min(60,t*3.5));
+    set(q('thickness','data-slab'),{y:150-tk,height:tk});
+    set(q('thickness','data-dim'),{x1:430,y1:150-tk,x2:430,y2:150});
+    set(q('thickness','data-sub1'),{x:446,y:150-tk/2-8}); set(q('thickness','data-v1'),{x:446,y:150-tk/2+18}); q('thickness','data-v1').textContent=fmt(t)+' mm';
+    /* joint */
+    const j=val('joint',3), gp=Math.max(10,Math.min(46,6+j*6));
+    const x0=280-(300+gp)/2;
+    set(q('joint','data-ja'),{x:x0}); set(q('joint','data-jb'),{x:x0+150+gp}); set(q('joint','data-gap'),{x:x0+150,width:gp});
+    set(q('joint','data-ar1'),{x1:x0+150-34,y1:56,x2:x0+150+2,y2:56}); set(q('joint','data-ar2'),{x1:x0+150+gp+34,y1:56,x2:x0+150+gp-2,y2:56});
+    q('joint','data-v1').textContent=fmt(j)+' mm';
+    /* area */
+    const a=val('area',100), ta=(g.l/1000)*(g.w/1000), n=Math.ceil(a/ta);
+    const cols=14, rows=5, cw=(420-(cols+1)*3)/cols, ch=(132-(rows+1)*3)/rows;
+    let h=''; let k=0;
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){h+=`<rect class="tg-tile tg-pop" style="--i:${k++}" x="${(70+3+c*(cw+3)).toFixed(1)}" y="${(18+3+r*(ch+3)).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" rx="2"/>`;}
+    const grid=q('area','data-grid'); if(grid.dataset.k!==cols+'x'+rows){grid.innerHTML=h;grid.dataset.k=cols+'x'+rows;}
+    const kg=$('grout-kg'), kgTxt=kg?kg.textContent.replace(/[^\d.]/g,''):'';
+    q('area','data-v1').textContent=fmt(a)+' m²  ·  ≈ '+(n>99999?'99,999+':n.toLocaleString())+' tiles'+(kgTxt?'  ·  '+kgTxt+' kg grout':'');
+    /* density */
+    const d=val('density',2), f=Math.max(0.18,Math.min(1,(d-1.4)/1.0));
+    q('density','data-liq').style.transform='scaleY('+f+')'; q('density','data-v1').textContent=fmt(d)+' kg/L';
+  }
+
+  let cur='idle';
+  function go(name){
+    if(!S[name]) name='idle';
+    Object.keys(S).forEach(k=>S[k].classList.remove('on'));
+    void svg.getBoundingClientRect();
+    update(); S[name].classList.add('on'); cur=name;
+    hint.textContent=HINT[name]||HINT.idle;
+    steps.forEach(b=>b.classList.toggle('on',b.dataset.s===name));
+  }
+  Object.keys(F).forEach(k=>{
+    const el=F[k]; if(!el) return;
+    el.addEventListener('focus',()=>go(k));
+    el.addEventListener('input',update);
+  });
+  document.querySelectorAll('#groutDensityChips .density-chip').forEach(b=>b.addEventListener('click',()=>{go('density');setTimeout(update,30);}));
+  steps.forEach(b=>b.addEventListener('click',()=>{const el=$(b.dataset.f); if(el) el.focus();}));
+  document.addEventListener('focusout',()=>{
+    setTimeout(()=>{
+      const ae=document.activeElement;
+      if(Object.keys(F).some(k=>F[k]===ae)) return;
+      const kg=$('grout-kg'); const done=kg&&/\d/.test(kg.textContent);
+      go(done?'area':'idle');
+    },160);
+  });
+  go('idle');
+
+  /* sparkle burst when a result first appears */
+  const rv=$('grout-kg'), card=document.querySelector('#panel-grout .calc-results');
+  let had=false;
+  function burst(){
+    if(!card||window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const cols=['#C50337','#021C4F','#FF8CA6','#F5C451'];
+    for(let i=0;i<18;i++){
+      const sp=document.createElement('span'); sp.className='calc-spark';
+      const ang=Math.random()*Math.PI*2, dist=60+Math.random()*90;
+      sp.style.setProperty('--dx',Math.cos(ang)*dist+'px'); sp.style.setProperty('--dy',Math.sin(ang)*dist+'px'); sp.style.setProperty('--rot',(Math.random()*360)+'deg');
+      sp.style.background=cols[i%cols.length]; sp.style.top='38%';
+      card.appendChild(sp); setTimeout(()=>sp.remove(),1100);
+    }
+  }
+  if(rv && 'MutationObserver' in window){
+    new MutationObserver(()=>{
+      const has=/\d/.test(rv.textContent);
+      if(has&&!had){ burst(); }
+      had=has; update();
+    }).observe(rv,{childList:true,characterData:true,subtree:true});
+  }
+})();
 
 /* ============================================================
    CONTACT FORM
